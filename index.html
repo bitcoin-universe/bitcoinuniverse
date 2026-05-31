@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Universe — 3D Star Systems</title>
+    <link rel="icon" type="image/png" href="bitblock.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <style>
+        /* ─── RESET & TOKENS ─────────────────────────── */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --btc-orange: #f7931a;
+            --btc-amber:  #ffab40;
+            --btc-deep:   #c4620a;
+            --btc-glow:   rgba(247,147,26,0.4);
+            --btc-soft:   rgba(247,147,26,0.12);
+            --purple:     #9c4dff;
+            --purple-soft:#ce93d8;
+            --blue:       #4fc3f7;
+            --cyan:       #00e5ff;
+            --bg-void:    #020209;
+            --bg-deep:    #04040f;
+            --bg-panel:   rgba(8,8,22,0.88);
+            --bg-card:    rgba(14,14,34,0.92);
+            --bg-card-h:  rgba(20,20,46,0.96);
+            --border:     rgba(38,38,72,0.9);
+            --border-lit: rgba(58,58,98,1);
+            --text:       #eaeaff;
+            --text-muted: #7272a0;
+            --text-dim:   #40406a;
+            --rarity-common:      #bdbdbd;
+            --rarity-uncommon:    #69f0ae;
+            --rarity-rare:        #40c4ff;
+            --rarity-epic:        #e040fb;
+            --rarity-legendary:   #ffab40;
+            --rarity-mythic:      #ff1744;
+            --rarity-transcendent:#ffffff;
+            --sidebar-w: 430px;
+            --gap: 18px;
+            --radius-panel: 16px;
+            --radius-card: 10px;
+        }
+        /* ─── WHITE THEME ─────────────────────────────── */
+        html.theme-light {
+            --bg-void:    #f0f0f5;
+            --bg-deep:    #e8e8f0;
+            --bg-panel:   rgba(255,255,255,0.92);
+            --bg-card:    rgba(245,245,252,0.97);
+            --bg-card-h:  rgba(235,235,248,1);
+            --border:     rgba(200,200,220,0.9);
+            --border-lit: rgba(180,180,210,1);
+            --text:       #14142a;
+            --text-muted: #5a5a80;
+            --text-dim:   #9090b8;
+            --btc-glow:   rgba(247,147,26,0.3);
+            --btc-soft:   rgba(247,147,26,0.1);
+        }
+        html.theme-light body {
+            background: var(--bg-void);
+        }
+        html.theme-light .cosmos::before {
+            background:
+                radial-gradient(ellipse 100% 70% at 10%  0%,  rgba(247,147,26,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 80%  60% at 90%  80%, rgba(140,90,255,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse 60%  50% at 50%  50%, rgba(0,180,255,0.03)  0%, transparent 60%),
+                linear-gradient(180deg, #f0f0f5 0%, #e8e8f0 50%, #f0f0f5 100%);
+        }
+        html.theme-light .orb-1 { background:rgba(247,147,26,0.07); }
+        html.theme-light .orb-2 { background:rgba(120,80,220,0.06); }
+        html.theme-light .orb-3 { background:rgba(0,180,255,0.04); }
+        html.theme-light .orb-4 { background:rgba(247,147,26,0.04); }
+        html.theme-light .dot-grid {
+            background-image: radial-gradient(rgba(100,100,180,0.18) 1px, transparent 1px);
+        }
+        html.theme-light h1 {
+            background: linear-gradient(160deg, #1a1a2e 0%, #8b4000 40%, var(--btc-orange) 70%, #c4620a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(247,147,26,0.25));
+        }
+        html.theme-light .subtitle { color: var(--text-dim); }
+        html.theme-light .three-container {
+            background: #0a0a14;
+            border-color: rgba(247,147,26,0.2);
+        }
+        html.theme-light .panel {
+            box-shadow: 0 2px 40px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.8);
+        }
+        html.theme-light .panel-header {
+            background: linear-gradient(135deg, rgba(240,240,252,0.9) 0%, rgba(230,230,248,0.95) 100%);
+        }
+        html.theme-light code { background: rgba(0,0,0,0.06); color: #1a6fa0; border-color: rgba(79,195,247,0.25); }
+        html.theme-light .rarity-Common { background:rgba(100,100,100,0.08); }
+        html.theme-light #hashPreview { color: var(--text-dim); }
+        html.theme-light ::-webkit-scrollbar-track { background: var(--bg-void); }
+
+        /* ─── THEME TOGGLE ────────────────────────────── */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-lit);
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .theme-btn {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border: none;
+            padding: 8px 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--text-dim);
+            border-radius: 0;
+        }
+        .theme-btn:hover { color: var(--text-muted); }
+        .theme-btn.active {
+            background: var(--btc-orange);
+            color: #0a0500;
+            box-shadow: inset 0 1px 0 rgba(255,220,150,0.3);
+        }
+        .theme-btn::before { display:none; }
+        html { scroll-behavior:smooth; }
+        body {
+            background: var(--bg-void);
+            color: var(--text);
+            font-family: 'Exo 2', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── ATMOSPHERE ──────────────────────────────── */
+        .cosmos {
+            position:fixed; inset:0; z-index:0; pointer-events:none;
+        }
+        .cosmos::before {
+            content:'';
+            position:absolute; inset:0;
+            background:
+                radial-gradient(ellipse 100% 70% at 10%  0%,  rgba(247,147,26,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 80%  60% at 90%  80%, rgba(100,50,255,0.09) 0%, transparent 55%),
+                radial-gradient(ellipse 60%  50% at 50%  50%, rgba(0,229,255,0.03)  0%, transparent 60%),
+                linear-gradient(180deg, #020209 0%, #04040f 50%, #020209 100%);
+        }
+        .orb { position:absolute; border-radius:50%; filter:blur(90px); animation:orbFloat ease-in-out infinite alternate; }
+        .orb-1 { width:600px; height:320px; background:rgba(247,147,26,0.09); top:-80px; left:-120px; animation-duration:28s; }
+        .orb-2 { width:450px; height:450px; background:rgba(80,40,220,0.1); bottom:-140px; right:-80px; animation-duration:34s; animation-direction:alternate-reverse; }
+        .orb-3 { width:350px; height:200px; background:rgba(0,229,255,0.05); top:35%; left:55%; animation-duration:22s; }
+        .orb-4 { width:250px; height:250px; background:rgba(247,147,26,0.04); top:60%; left:20%; animation-duration:26s; animation-direction:alternate-reverse; }
+        @keyframes orbFloat { from{transform:translate(0,0) scale(1)} to{transform:translate(35px,25px) scale(1.08)} }
+        .dot-grid {
+            position:fixed; inset:0; z-index:0; pointer-events:none;
+            background-image:radial-gradient(rgba(100,100,200,0.1) 1px, transparent 1px);
+            background-size:28px 28px;
+            mask-image:radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent);
+        }
+        .scanlines {
+            position:fixed; inset:0; z-index:1; pointer-events:none;
+            background:repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,15,0.025) 3px, rgba(0,0,15,0.025) 4px);
+        }
+
+        /* ─── LAYOUT ──────────────────────────────────── */
+        .container {
+            max-width: 1540px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ─── HEADER ──────────────────────────────────── */
+        /* ─── TOP NAVBAR ──────────────────────────────── */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0;
+            margin-bottom: 18px;
+            position: relative;
+            /* subtle bottom rule */
+            border-bottom: 1px solid transparent;
+            background:
+                linear-gradient(var(--bg-void), var(--bg-void)) padding-box,
+                linear-gradient(90deg, transparent 0%, rgba(247,147,26,0.08) 20%, rgba(247,147,26,0.35) 50%, rgba(247,147,26,0.08) 80%, transparent 100%) border-box;
+        }
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 3px;
+            padding: 18px 0 14px;
+            flex-shrink: 0;
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.1rem, 2vw, 1.55rem);
+            font-weight: 900;
+            letter-spacing: 3px;
+            line-height: 1.1;
+            background: linear-gradient(160deg, #ffffff 0%, #ffe4b0 35%, var(--btc-orange) 65%, #c4620a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 28px rgba(247,147,26,0.35));
+            white-space: nowrap;
+        }
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 1.2px;
+            font-family: 'Space Mono', monospace;
+            white-space: nowrap;
+        }
+        .pulse-dot {
+            width:6px; height:6px; background:var(--btc-orange); border-radius:50%;
+            box-shadow:0 0 8px var(--btc-orange);
+            animation:pulseDot 1.8s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
+
+        /* ─── CONTROLS (now in header right) ─────────── */
+        .controls-wrap { display: none; } /* hidden — controls moved into header */
+        .controls {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            padding: 8px 10px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-lit);
+            border-radius: 13px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.025);
+            flex-shrink: 0;
+        }
+        .controls-divider {
+            width: 1px;
+            height: 26px;
+            background: var(--border-lit);
+            flex-shrink: 0;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 10px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input-group:focus-within {
+            border-color: var(--btc-orange);
+            box-shadow: 0 0 0 1px rgba(247,147,26,0.2), 0 0 18px rgba(247,147,26,0.12);
+        }
+        .input-group label {
+            font-family: 'Space Mono', monospace;
+            color: var(--text-dim);
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+        input[type="number"] {
+            background: transparent;
+            border: none;
+            color: var(--btc-orange);
+            font-size: 1.2rem;
+            font-weight: 700;
+            width: 108px;
+            outline: none;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+        button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        button::before {
+            content:'';
+            position:absolute; top:0; left:-100%;
+            width:60%; height:100%;
+            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition:left 0.5s ease;
+        }
+        button:hover::before { left:160%; }
+        #exploreBtn {
+            background: linear-gradient(135deg, #f7931a 0%, #e07010 100%);
+            color: #0a0500;
+            box-shadow: 0 0 0 1px rgba(247,147,26,0.3), 0 4px 20px rgba(247,147,26,0.4), inset 0 1px 0 rgba(255,220,150,0.3);
+        }
+        #exploreBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 0 1px rgba(247,147,26,0.5), 0 8px 30px rgba(247,147,26,0.55), inset 0 1px 0 rgba(255,220,150,0.4);
+        }
+        #exploreBtn:active { transform:translateY(0); }
+        #exploreBtn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+        .nav-btn {
+            background: rgba(0,0,0,0.3);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            font-size: 0.7rem;
+            letter-spacing: 0;
+        }
+        .nav-btn:hover {
+            border-color: rgba(247,147,26,0.5);
+            color: var(--btc-orange);
+            box-shadow: 0 0 16px rgba(247,147,26,0.1);
+            transform: translateY(-1px);
+        }
+        .nav-btn:disabled { opacity:0.22; cursor:not-allowed; transform:none !important; box-shadow:none !important; border-color:var(--border) !important; color:var(--text-dim) !important; }
+        .random-btn {
+            background: rgba(70,15,130,0.28);
+            color: var(--purple-soft);
+            border: 1px solid rgba(156,77,255,0.28);
+        }
+        .random-btn:hover {
+            background: rgba(90,20,170,0.4);
+            border-color: rgba(156,77,255,0.7);
+            color: #e1b8ff;
+            box-shadow: 0 0 24px rgba(156,77,255,0.28);
+            transform: translateY(-2px);
+        }
+        .share-btn {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+            padding: 9px 16px;
+            font-size: 0.6rem;
+        }
+        .share-btn:hover {
+            border-color: rgba(79,195,247,0.5);
+            color: var(--blue);
+            box-shadow: 0 0 14px rgba(79,195,247,0.14);
+        }
+
+        /* ─── MAIN GRID ───────────────────────────────── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr var(--sidebar-w);
+            gap: var(--gap);
+            align-items: start;
+        }
+        @media(max-width:1160px) { .main-grid { grid-template-columns: 1fr; } }
+
+        /* ─── PANELS ──────────────────────────────────── */
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-panel);
+            overflow: hidden;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 0 2px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.025), inset 0 -1px 0 rgba(0,0,0,0.3);
+            transition: box-shadow 0.35s, border-color 0.35s;
+        }
+        .panel:hover {
+            border-color: rgba(247,147,26,0.1);
+            box-shadow: 0 4px 80px rgba(0,0,0,0.55), 0 0 50px rgba(247,147,26,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+        }
+        .panel-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(38,38,72,0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(20,20,46,0.8) 0%, rgba(12,12,28,0.9) 100%);
+            position: relative;
+            gap: 12px;
+        }
+        .panel-header::after {
+            content:'';
+            position:absolute; bottom:0; left:20px; right:20px; height:1px;
+            background:linear-gradient(90deg, transparent, rgba(247,147,26,0.22), transparent);
+        }
+        .panel-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--text);
+            text-transform: uppercase;
+            min-width: 0;
+        }
+        .panel-header-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .live-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.52rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--btc-orange);
+            background: rgba(247,147,26,0.07);
+            border: 1px solid rgba(247,147,26,0.16);
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
+        .panel-body { padding: 18px 20px; }
+        .panel-body-scroll {
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+            padding: 18px 20px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(247,147,26,0.18) transparent;
+        }
+        .panel-body-scroll::-webkit-scrollbar { width: 4px; }
+        .panel-body-scroll::-webkit-scrollbar-track { background: transparent; }
+        .panel-body-scroll::-webkit-scrollbar-thumb { background: rgba(247,147,26,0.18); border-radius:2px; }
+
+        /* ─── VIEWPORT AREA ───────────────────────────── */
+        .viewport-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+        .system-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--btc-orange);
+            text-shadow: 0 0 20px rgba(247,147,26,0.5);
+            letter-spacing: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .system-name-ornament {
+            color: rgba(247,147,26,0.3);
+            margin: 0 6px;
+        }
+        .viewport-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .three-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: #000008;
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 300px;
+            cursor: grab;
+            border: 1px solid rgba(247,147,26,0.14);
+            box-shadow: 0 0 0 1px rgba(247,147,26,0.06), 0 0 50px rgba(247,147,26,0.05), inset 0 0 80px rgba(0,0,20,0.6);
+            animation: viewportGlow 4s ease-in-out infinite alternate;
+        }
+        @keyframes viewportGlow {
+            from { box-shadow: 0 0 0 1px rgba(247,147,26,0.06), 0 0 30px rgba(247,147,26,0.04), inset 0 0 80px rgba(0,0,20,0.6); }
+            to   { box-shadow: 0 0 0 1px rgba(247,147,26,0.14), 0 0 55px rgba(247,147,26,0.09), inset 0 0 80px rgba(0,0,20,0.6); }
+        }
+        .three-container:active { cursor:grabbing; }
+        .three-container::after {
+            content:''; position:absolute; inset:0; border-radius:12px;
+            background:
+                linear-gradient(to bottom, rgba(247,147,26,0.025) 0%, transparent 20%, transparent 80%, rgba(0,0,15,0.2) 100%),
+                linear-gradient(to right, rgba(0,0,15,0.12) 0%, transparent 8%, transparent 92%, rgba(0,0,15,0.12) 100%);
+            pointer-events:none; z-index:1;
+        }
+        .canvas-loading-overlay {
+            position:absolute; inset:0;
+            display:flex; flex-direction:column;
+            align-items:center; justify-content:center;
+            background:rgba(2,2,15,0.82);
+            backdrop-filter:blur(10px);
+            z-index:3; gap:16px;
+        }
+        .canvas-loading-overlay.hidden { display:none; }
+        .canvas-loading-spinner {
+            width:40px; height:40px;
+            border:2px solid rgba(247,147,26,0.1);
+            border-top-color:var(--btc-orange);
+            border-right-color:rgba(247,147,26,0.45);
+            border-radius:50%;
+            animation:spin 0.75s linear infinite;
+            box-shadow:0 0 20px rgba(247,147,26,0.2);
+        }
+        .loading-text {
+            font-family:'Space Mono', monospace;
+            font-size:0.58rem; letter-spacing:4px; text-transform:uppercase;
+            color:var(--btc-orange); opacity:0.6;
+            animation:loadingBlink 1.4s ease-in-out infinite;
+        }
+        @keyframes loadingBlink { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        /* ─── VIEWPORT FOOTER ─────────────────────────── */
+        .viewport-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .legend-box {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+        .legend-item:hover { border-color:rgba(247,147,26,0.3); color:var(--text); }
+        .legend-dot {
+            width:7px; height:7px; border-radius:50%; flex-shrink:0;
+            filter:brightness(1.2); box-shadow:0 0 5px currentColor;
+        }
+        .verify-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 14px;
+            transition: border-color 0.3s;
+            flex-shrink: 0;
+        }
+        .verify-box:hover { border-color:rgba(247,147,26,0.22); }
+        .verify-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.52rem; text-transform:uppercase; letter-spacing:2px;
+            color: var(--text-dim); white-space:nowrap;
+        }
+        .verify-box a {
+            color: var(--btc-orange);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            transition: text-shadow 0.2s;
+            white-space: nowrap;
+        }
+        .verify-box a:hover { text-shadow:0 0 10px rgba(247,147,26,0.6); }
+        .controls-hint {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.52rem;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── TRAITS SIDEBAR ──────────────────────────── */
+        .section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.56rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            margin: 20px 0 10px;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-bottom: 1px solid;
+            border-image: linear-gradient(90deg, rgba(247,147,26,0.28), transparent) 1;
+        }
+        .section-title:first-child { margin-top: 0; }
+        .section-title::before { content:'//'; color:rgba(247,147,26,0.4); }
+        .traits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        @media(max-width:600px) { .traits-grid { grid-template-columns:1fr; } }
+        .trait-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 2px solid rgba(247,147,26,0.25);
+            border-radius: var(--radius-card);
+            padding: 12px 12px 10px;
+            transition: all 0.22s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .trait-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:1px;
+            background:linear-gradient(90deg, rgba(247,147,26,0.2), transparent 65%);
+        }
+        .trait-card:hover {
+            border-color: rgba(247,147,26,0.25);
+            border-left-color: var(--btc-orange);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 18px rgba(247,147,26,0.07);
+        }
+        .trait-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.52rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+        .trait-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.25;
+        }
+        .trait-detail {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.56rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .trait-match-badge {
+            display:inline-block; font-size:0.55rem; padding:2px 7px;
+            border-radius:8px; background:rgba(247,147,26,0.1); color:var(--btc-orange);
+            margin-top:5px; font-family:'Space Mono', monospace;
+        }
+
+        /* ─── RARITY BADGES ───────────────────────────── */
+        .rarity-badge {
+            padding: 4px 13px; border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.58rem; font-weight:700;
+            text-transform:uppercase; letter-spacing:2px;
+            flex-shrink: 0;
+        }
+        .rarity-Common     { background:rgba(189,189,189,0.08); color:var(--rarity-common);      border:1px solid rgba(189,189,189,0.22); }
+        .rarity-Uncommon   { background:rgba(105,240,174,0.08); color:var(--rarity-uncommon);    border:1px solid rgba(105,240,174,0.28); box-shadow:0 0 10px rgba(105,240,174,0.1); }
+        .rarity-Rare       { background:rgba(64,196,255,0.08);  color:var(--rarity-rare);        border:1px solid rgba(64,196,255,0.3);  box-shadow:0 0 14px rgba(64,196,255,0.16); }
+        .rarity-Epic       { background:rgba(224,64,251,0.08);  color:var(--rarity-epic);        border:1px solid rgba(224,64,251,0.3);  box-shadow:0 0 16px rgba(224,64,251,0.16); }
+        .rarity-Legendary  { background:rgba(255,171,64,0.1);   color:var(--rarity-legendary);   border:1px solid rgba(255,171,64,0.38); box-shadow:0 0 20px rgba(255,171,64,0.2); animation:legendaryPulse 3s ease-in-out infinite; }
+        @keyframes legendaryPulse { 0%,100%{box-shadow:0 0 12px rgba(255,171,64,0.14)} 50%{box-shadow:0 0 26px rgba(255,171,64,0.38)} }
+
+        /* MYTHIC */
+        @keyframes mythicBlaze {
+            0%   { box-shadow:0 0 22px rgba(255,23,68,0.6),0 0 45px rgba(255,23,68,0.22),0 0 90px rgba(220,0,40,0.1),inset 0 0 18px rgba(255,23,68,0.06); border-color:rgba(255,23,68,0.6); }
+            33%  { box-shadow:0 0 32px rgba(255,80,0,0.65),0 0 60px rgba(255,50,0,0.26),0 0 110px rgba(255,30,0,0.12),inset 0 0 24px rgba(255,80,0,0.07); border-color:rgba(255,70,0,0.65); }
+            66%  { box-shadow:0 0 28px rgba(255,0,80,0.6),0 0 52px rgba(200,0,60,0.24),0 0 100px rgba(180,0,40,0.1),inset 0 0 20px rgba(255,0,60,0.06); border-color:rgba(255,0,60,0.58); }
+            100% { box-shadow:0 0 22px rgba(255,23,68,0.6),0 0 45px rgba(255,23,68,0.22),0 0 90px rgba(220,0,40,0.1),inset 0 0 18px rgba(255,23,68,0.06); border-color:rgba(255,23,68,0.6); }
+        }
+        @keyframes mythicSweep { 0%{left:-120%} 100%{left:220%} }
+        @keyframes mythicSpin { to{transform:rotate(360deg)} }
+        @keyframes mythicCrackle { 0%,90%,100%{opacity:0} 92%{opacity:0.7;transform:scaleY(1.2)} 94%{opacity:0.2} 96%{opacity:0.9;transform:scaleY(0.95)} }
+        .rarity-Mythic {
+            background:linear-gradient(135deg,rgba(255,23,68,0.16) 0%,rgba(180,0,40,0.08) 60%,rgba(255,60,0,0.06) 100%);
+            color:#ff1744; border:1.5px solid rgba(255,23,68,0.6);
+            box-shadow:0 0 22px rgba(255,23,68,0.6),0 0 45px rgba(255,23,68,0.22),0 0 90px rgba(220,0,40,0.1),inset 0 0 18px rgba(255,23,68,0.06);
+            animation:mythicBlaze 2s ease-in-out infinite;
+            text-shadow:0 0 10px rgba(255,23,68,1),0 0 22px rgba(255,80,0,0.65),0 0 42px rgba(255,23,68,0.35);
+            position:relative; overflow:hidden;
+        }
+        .rarity-Mythic::before {
+            content:''; position:absolute; top:-2px; left:-2px; right:-2px; bottom:-2px;
+            background:conic-gradient(from 0deg, rgba(255,23,68,0.12) 0deg, rgba(255,80,0,0.18) 60deg, rgba(255,23,68,0.06) 120deg, rgba(200,0,30,0.14) 180deg, rgba(255,60,0,0.16) 240deg, rgba(255,23,68,0.08) 300deg, rgba(255,23,68,0.12) 360deg);
+            animation:mythicSpin 3s linear infinite; z-index:-1; border-radius:inherit; filter:blur(3px);
+        }
+        .rarity-Mythic::after {
+            content:''; position:absolute; top:0; left:-120%; width:60%; height:100%;
+            background:linear-gradient(90deg, transparent, rgba(255,120,80,0.22), rgba(255,255,200,0.12), rgba(255,120,80,0.08), transparent);
+            animation:mythicSweep 2.8s ease-in-out infinite; pointer-events:none;
+        }
+        .trait-card.tier-mythic {
+            border-left:3px solid #ff1744 !important; border-color:rgba(255,23,68,0.38) !important;
+            background:linear-gradient(135deg,rgba(255,23,68,0.07) 0%,rgba(120,0,30,0.04) 50%,rgba(14,14,34,0.92) 100%) !important;
+            animation:mythicCardPulse 2s ease-in-out infinite; position:relative; overflow:hidden;
+        }
+        .trait-card.tier-mythic::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse at 30% 50%, rgba(255,23,68,0.09) 0%, transparent 65%);
+            animation:mythicCardPulse 2s ease-in-out infinite; pointer-events:none;
+        }
+        @keyframes mythicCardPulse {
+            0%,100%{box-shadow:0 0 18px rgba(255,23,68,0.1),inset 0 0 18px rgba(255,23,68,0.03); border-color:rgba(255,23,68,0.3) !important;}
+            50%{box-shadow:0 0 38px rgba(255,23,68,0.22),inset 0 0 30px rgba(255,23,68,0.07); border-color:rgba(255,23,68,0.6) !important;}
+        }
+
+        /* TRANSCENDENT */
+        @keyframes transcendentPulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.18)} }
+        @keyframes prismBorderCycle {
+            0%{border-color:rgba(255,100,120,0.75);box-shadow:0 0 28px rgba(255,100,120,0.4),0 0 60px rgba(255,100,120,0.15),inset 0 0 24px rgba(255,100,120,0.05);}
+            14%{border-color:rgba(255,190,60,0.75);box-shadow:0 0 28px rgba(255,190,60,0.4),0 0 60px rgba(255,190,60,0.15),inset 0 0 24px rgba(255,190,60,0.05);}
+            28%{border-color:rgba(60,240,120,0.75);box-shadow:0 0 28px rgba(60,240,120,0.4),0 0 60px rgba(60,240,120,0.15),inset 0 0 24px rgba(60,240,120,0.05);}
+            42%{border-color:rgba(50,200,255,0.75);box-shadow:0 0 28px rgba(50,200,255,0.4),0 0 60px rgba(50,200,255,0.15),inset 0 0 24px rgba(50,200,255,0.05);}
+            57%{border-color:rgba(160,80,255,0.75);box-shadow:0 0 28px rgba(160,80,255,0.4),0 0 60px rgba(160,80,255,0.15),inset 0 0 24px rgba(160,80,255,0.05);}
+            71%{border-color:rgba(255,80,200,0.75);box-shadow:0 0 28px rgba(255,80,200,0.4),0 0 60px rgba(255,80,200,0.15),inset 0 0 24px rgba(255,80,200,0.05);}
+            85%{border-color:rgba(255,100,120,0.75);box-shadow:0 0 28px rgba(255,100,120,0.4),0 0 60px rgba(255,100,120,0.15),inset 0 0 24px rgba(255,100,120,0.05);}
+            100%{border-color:rgba(255,100,120,0.75);box-shadow:0 0 28px rgba(255,100,120,0.4),0 0 60px rgba(255,100,120,0.15),inset 0 0 24px rgba(255,100,120,0.05);}
+        }
+        @keyframes prismTextCycle {
+            0%{color:#ff6478} 14%{color:#ffbe3c} 28%{color:#3cf078} 42%{color:#32c8ff} 57%{color:#a050ff} 71%{color:#ff50c8} 85%,100%{color:#ff6478}
+        }
+        .rarity-Transcendent {
+            background:linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(160,80,255,0.06) 50%, rgba(255,100,120,0.05) 100%);
+            color:#fff; border:1.5px solid rgba(255,100,120,0.75);
+            animation:prismBorderCycle 7s linear infinite, transcendentPulse 2s ease-in-out infinite;
+            text-shadow:0 0 14px rgba(255,255,255,0.9),0 0 28px rgba(160,80,255,0.5);
+            position:relative; overflow:hidden;
+        }
+
+        /* ECONOMY tiers */
+        @keyframes singularityCollapse {
+            0%,100%{filter:brightness(1)} 50%{filter:brightness(1.3) hue-rotate(15deg)}
+        }
+        @keyframes singularityBorderPulse {
+            0%,100%{border-color:rgba(255,215,0,0.9); box-shadow:0 0 22px rgba(255,215,0,0.65),0 0 45px rgba(255,165,0,0.3),0 0 90px rgba(255,140,0,0.15),inset 0 0 18px rgba(255,215,0,0.08);}
+            50%{border-color:rgba(255,255,120,0.95); box-shadow:0 0 38px rgba(255,230,0,0.9),0 0 75px rgba(255,180,0,0.5),0 0 140px rgba(255,200,0,0.25),inset 0 0 28px rgba(255,215,0,0.14);}
+        }
+        .trait-card.economy-tier-singularity {
+            border-left:3px solid gold !important; background:linear-gradient(135deg,rgba(255,215,0,0.1) 0%,rgba(180,120,0,0.06) 50%,rgba(14,14,34,0.92) 100%) !important;
+            animation:singularityBorderPulse 2s ease-in-out infinite; position:relative; overflow:hidden;
+        }
+        .trait-card.economy-tier-singularity::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse at 30% 50%, rgba(255,215,0,0.12) 0%, rgba(255,140,0,0.05) 40%, transparent 70%);
+            pointer-events:none;
+        }
+        .trait-card.economy-tier-singularity::after {
+            content:'◈'; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+            color:rgba(255,215,0,0.6); font-size:0.85rem; font-family:'Orbitron',sans-serif; font-weight:900;
+            animation:singularityCollapse 2.5s ease-in-out infinite;
+        }
+        .economy-singularity-text { color:gold !important; animation:singularityCollapse 3.5s ease-in-out infinite; font-weight:900; }
+        .economy-tier-label {
+            font-family:'Space Mono',monospace; font-size:0.52rem; text-transform:uppercase;
+            letter-spacing:1.5px; padding:3px 8px; border-radius:5px; display:inline-block;
+            margin-top:5px; font-weight:700;
+        }
+        .singularity-label {
+            background:rgba(255,215,0,0.1); color:rgba(255,215,0,0.85);
+            border:1px solid rgba(255,215,0,0.3); text-shadow:0 0 8px rgba(255,215,0,0.5);
+            animation:singularityCollapse 3.5s ease-in-out infinite;
+        }
+        @keyframes omegaGlowPulse {
+            0%,100%{border-color:rgba(195,70,255,0.8);box-shadow:0 0 18px rgba(195,70,255,0.65),0 0 36px rgba(150,0,255,0.35),0 0 70px rgba(180,0,255,0.15),inset 0 0 18px rgba(195,70,255,0.08);}
+            50%{border-color:rgba(220,100,255,0.95);box-shadow:0 0 34px rgba(195,70,255,0.9),0 0 68px rgba(160,0,220,0.5),0 0 120px rgba(200,80,255,0.25),inset 0 0 28px rgba(195,70,255,0.15);}
+        }
+        .trait-card.economy-tier-omega {
+            border-left:3px solid #d050ff !important;
+            background:linear-gradient(135deg,rgba(195,70,255,0.08) 0%,rgba(100,0,200,0.05) 40%,rgba(60,0,120,0.03) 70%,rgba(14,14,34,0.92) 100%) !important;
+            animation:omegaGlowPulse 2.5s ease-in-out infinite; position:relative; overflow:hidden;
+        }
+        .trait-card.economy-tier-omega::before {
+            content:''; position:absolute; top:50%; left:50%; width:180%; height:180%;
+            background:radial-gradient(ellipse,rgba(195,70,255,0.12) 0%,rgba(160,0,220,0.06) 35%,transparent 70%);
+            transform:translate(-50%,-50%); animation:omegaGlowPulse 2.5s ease-in-out infinite; pointer-events:none;
+        }
+        .trait-card.economy-tier-omega::after {
+            content:'Ω'; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+            color:rgba(195,70,255,0.7); font-size:0.85rem; font-family:'Orbitron',sans-serif; font-weight:900;
+            animation:omegaSymbolFloat 2.8s ease-in-out infinite;
+        }
+        @keyframes omegaSymbolFloat { 0%,100%{opacity:0.45;transform:translateY(-50%) scale(1)} 50%{opacity:0.85;transform:translateY(-52%) scale(1.2)} }
+        .trait-value.economy-omega-text { color:#d050ff !important; animation:singularityCollapse 3.5s ease-in-out infinite; font-weight:900; }
+        .economy-tier-label.omega-label {
+            background:rgba(195,70,255,0.1); color:rgba(200,80,255,0.8);
+            border:1px solid rgba(195,70,255,0.3); text-shadow:0 0 10px rgba(195,70,255,0.55);
+            animation:singularityCollapse 3.5s ease-in-out infinite;
+        }
+
+        /* TRAIT VALUE RARITY CLASSES */
+        .trait-value.rarity-Common    { color:var(--rarity-common); }
+        .trait-value.rarity-Uncommon  { color:var(--rarity-uncommon); text-shadow:0 0 10px rgba(105,240,174,0.35); }
+        .trait-value.rarity-Rare      { color:var(--rarity-rare); text-shadow:0 0 10px rgba(64,196,255,0.35); }
+        .trait-value.rarity-Epic      { color:var(--rarity-epic); text-shadow:0 0 12px rgba(224,64,251,0.4); }
+        .trait-value.rarity-Legendary { color:var(--rarity-legendary); text-shadow:0 0 16px rgba(255,171,64,0.5); }
+        .trait-value.rarity-Mythic    { color:var(--rarity-mythic); animation:mythicTextFlare 1.5s ease-in-out infinite; font-weight:900; }
+        @keyframes mythicTextFlare {
+            0%,100%{text-shadow:0 0 12px rgba(255,23,68,0.95),0 0 26px rgba(255,80,0,0.6),0 0 50px rgba(255,23,68,0.28); filter:brightness(1);}
+            50%{text-shadow:0 0 18px rgba(255,80,0,1),0 0 38px rgba(255,23,68,0.82),0 0 80px rgba(255,100,0,0.5),0 0 120px rgba(255,23,68,0.2); filter:brightness(1.3);}
+        }
+        .trait-value.rarity-Transcendent { color:#fff; animation:prismTextCycle 3.5s linear infinite; font-weight:900; }
+
+        /* ─── FLAGS ───────────────────────────────────── */
+        .flags-list { display:flex; flex-wrap:wrap; gap:6px; }
+        .flag {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 6px 11px;
+            border-radius: 7px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.22s;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+        }
+        .flag.active {
+            border-color: rgba(247,147,26,0.4);
+            background: rgba(247,147,26,0.07);
+            color: var(--btc-orange);
+            box-shadow: 0 0 14px rgba(247,147,26,0.09);
+        }
+        .flag.active:hover { border-color:rgba(247,147,26,0.7); box-shadow:0 0 22px rgba(247,147,26,0.18); }
+        .flag.inactive { opacity:0.24; filter:grayscale(0.6); }
+
+        /* ══ GENESIS SIGNAL — ultra-rare flag, full-width premium card ═════ */
+        .flag.flag-genesis { display:none; }
+        .flag.flag-genesis.inactive {
+            display:flex; opacity:0.18; filter:grayscale(0.8);
+            font-size:0.68rem; padding:5px 10px; border-radius:7px;
+        }
+        .flag.flag-genesis.active {
+            display:flex; flex-direction:column; align-items:center; gap:9px;
+            width:100%; padding:20px 20px 16px; border-radius:13px;
+            background:linear-gradient(135deg,
+                rgba(255,215,0,0.12) 0%, rgba(255,165,0,0.07) 40%,
+                rgba(255,255,200,0.04) 70%, rgba(14,14,34,0.97) 100%);
+            border:2px solid rgba(255,215,0,0.55);
+            box-shadow:
+                0 0 0 1px rgba(255,215,0,0.12),
+                0 0 38px rgba(255,215,0,0.3),
+                0 0 75px rgba(255,180,0,0.14),
+                0 0 120px rgba(255,215,0,0.07),
+                inset 0 0 44px rgba(255,215,0,0.06);
+            animation:gCardPulse 2.8s ease-in-out infinite;
+            position:relative; overflow:hidden; color:#ffd700;
+        }
+        .flag.flag-genesis.active::before {
+            content:''; position:absolute; inset:0; pointer-events:none;
+            background:linear-gradient(270deg,
+                rgba(255,215,0,0.05), rgba(255,255,200,0.1),
+                rgba(255,180,0,0.06), rgba(255,215,0,0.03));
+            background-size:300% 100%;
+            animation:gSweep 4s linear infinite;
+        }
+        .flag.flag-genesis.active::after {
+            content:''; position:absolute; top:0; left:-100%;
+            width:45%; height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,200,0.18),transparent);
+            animation:gShimmer 3.5s ease-in-out infinite;
+            pointer-events:none;
+        }
+        @keyframes gCardPulse {
+            0%,100%{
+                box-shadow:0 0 0 1px rgba(255,215,0,0.18),0 0 30px rgba(255,215,0,0.22),0 0 60px rgba(255,180,0,0.1),inset 0 0 32px rgba(255,215,0,0.05);
+                border-color:rgba(255,215,0,0.5);
+            }
+            50%{
+                box-shadow:0 0 0 2px rgba(255,255,160,0.5),0 0 52px rgba(255,215,0,0.45),0 0 95px rgba(255,180,0,0.22),0 0 150px rgba(255,215,0,0.08),inset 0 0 52px rgba(255,215,0,0.1);
+                border-color:rgba(255,255,160,0.75);
+            }
+        }
+        @keyframes gSweep { 0%{background-position:0% 50%} 100%{background-position:300% 50%} }
+        @keyframes gShimmer { 0%{left:-100%} 100%{left:200%} }
+
+        .genesis-header {
+            display:flex; align-items:center; gap:10px;
+            font-family:'Orbitron',sans-serif; font-size:0.8rem;
+            font-weight:900; letter-spacing:3px; text-transform:uppercase;
+            color:#ffd700;
+            text-shadow:0 0 10px rgba(255,215,0,0.9),0 0 24px rgba(255,165,0,0.5),0 0 46px rgba(255,215,0,0.22);
+            animation:gTextFlare 2.8s ease-in-out infinite;
+        }
+        @keyframes gTextFlare {
+            0%,100%{ text-shadow:0 0 10px rgba(255,215,0,0.85),0 0 22px rgba(255,165,0,0.45),0 0 44px rgba(255,215,0,0.18); filter:brightness(1); }
+            50%    { text-shadow:0 0 20px rgba(255,255,160,1),0 0 38px rgba(255,215,0,0.88),0 0 76px rgba(255,165,0,0.45),0 0 115px rgba(255,215,0,0.2); filter:brightness(1.28); }
+        }
+        .genesis-icon {
+            font-size:1.7rem;
+            animation:gIconRise 2.8s ease-in-out infinite;
+        }
+        @keyframes gIconRise {
+            0%,100%{ transform:translateY(0) scale(1); filter:drop-shadow(0 0 6px rgba(255,215,0,0.7)); }
+            50%    { transform:translateY(-4px) scale(1.14); filter:drop-shadow(0 0 18px rgba(255,215,0,1)) drop-shadow(0 0 32px rgba(255,165,0,0.65)); }
+        }
+        .genesis-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            font-family:'Orbitron',sans-serif; font-size:0.43rem;
+            font-weight:900; letter-spacing:3px; text-transform:uppercase;
+            padding:4px 16px; border-radius:20px;
+            background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.5);
+            color:rgba(255,215,0,0.9);
+            text-shadow:0 0 8px rgba(255,215,0,0.7);
+            box-shadow:0 0 14px rgba(255,215,0,0.16),inset 0 0 8px rgba(255,215,0,0.05);
+        }
+        .genesis-desc {
+            font-family:'Space Mono',monospace; font-size:0.59rem;
+            letter-spacing:1px; color:rgba(255,215,0,0.72);
+            text-align:center; line-height:1.75;
+        }
+        .genesis-desc strong { color:#ffd700; letter-spacing:1.5px; }
+        .genesis-pattern {
+            font-family:'Space Mono',monospace; font-size:0.7rem;
+            font-weight:700; letter-spacing:4px;
+            color:#ffd700; padding:5px 14px; border-radius:6px;
+            background:rgba(255,215,0,0.08);
+            border:1px solid rgba(255,215,0,0.3);
+            text-shadow:0 0 12px rgba(255,215,0,0.8);
+            animation:gTextFlare 2.8s ease-in-out infinite;
+        }
+        .genesis-rarity {
+            font-family:'Space Mono',monospace; font-size:0.56rem;
+            letter-spacing:1px; color:rgba(255,215,0,0.42);
+        }
+
+        /* ─── NAMESPACE BOX ───────────────────────────── */
+        .namespace-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 6px;
+            transition: border-color 0.3s;
+        }
+        .namespace-box:hover { border-color:rgba(247,147,26,0.2); }
+        .ns-label { font-family:'Space Mono',monospace; font-size:0.54rem; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-bottom:4px; }
+        .ns-value { color:var(--btc-orange); font-family:'Space Mono',monospace; font-size:0.88rem; }
+        code {
+            background:rgba(0,0,0,0.45); padding:3px 8px; border-radius:5px;
+            font-family:'Space Mono',monospace; font-size:0.64rem;
+            color:var(--blue); border:1px solid rgba(79,195,247,0.14);
+        }
+        .hash-preview-label {
+            font-family:'Space Mono',monospace; font-size:0.52rem; text-transform:uppercase;
+            letter-spacing:2px; color:var(--text-dim); margin-top:12px; margin-bottom:4px;
+        }
+        #hashPreview {
+            font-family:'Space Mono',monospace; font-size:0.58rem;
+            word-break:break-all; line-height:1.7; color:var(--text-dim);
+        }
+
+        /* ─── STATUS / ERRORS ─────────────────────────── */
+        #status { margin-bottom:12px; }
+        .error {
+            background:rgba(244,67,54,0.07); border:1px solid rgba(244,67,54,0.3);
+            color:#ef5350; padding:14px 18px; border-radius:10px;
+            font-family:'Space Mono',monospace; font-size:0.74rem; letter-spacing:0.5px;
+        }
+        .loading {
+            text-align:center; padding:40px; color:var(--text-muted);
+            font-family:'Space Mono',monospace; font-size:0.72rem;
+            letter-spacing:2.5px; text-transform:uppercase;
+            animation:loadingFade 1.8s ease-in-out infinite;
+        }
+        @keyframes loadingFade { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+        /* ─── TOAST ───────────────────────────────────── */
+        .success-toast {
+            position:fixed; bottom:28px; left:50%;
+            transform:translateX(-50%) translateY(100px);
+            background:linear-gradient(135deg,rgba(20,68,25,0.96),rgba(28,88,35,0.96));
+            backdrop-filter:blur(20px); color:#a5d6a7;
+            padding:12px 26px; border-radius:10px; z-index:999;
+            transition:transform 0.42s cubic-bezier(0.34,1.56,0.64,1);
+            border:1px solid rgba(105,240,174,0.2);
+            box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 22px rgba(105,240,174,0.08);
+            font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:1.5px;
+        }
+        .success-toast.visible { transform:translateX(-50%) translateY(0); }
+
+        /* ─── RARE RESOURCE CARDS ─── */
+.trait-card.resource-crystal {
+    border-left: 3px solid #00e5ff !important;
+    border-color: rgba(0,229,255,0.35) !important;
+    background: linear-gradient(135deg, rgba(0,30,40,0.95) 0%, rgba(0,50,70,0.85) 100%) !important;
+    animation: crystalPulse 2.5s ease-in-out infinite;
+    position: relative; overflow: hidden;
+}
+.trait-card.resource-crystal::before {
+    content: '💎'; position: absolute; right: 12px; top: 50%;
+    transform: translateY(-50%); font-size: 1.1rem; opacity: 0.25;
+    animation: crystalSpin 4s linear infinite;
+}
+@keyframes crystalPulse {
+    0%,100% { box-shadow: 0 0 18px rgba(0,229,255,0.15), inset 0 0 20px rgba(0,229,255,0.05); }
+    50%      { box-shadow: 0 0 40px rgba(0,229,255,0.35), inset 0 0 40px rgba(0,229,255,0.12); }
+}
+@keyframes crystalSpin { to { transform: translateY(-50%) rotate(360deg); } }
+
+.trait-card.resource-void {
+    border-left: 3px solid #9c4dff !important;
+    border-color: rgba(156,77,255,0.5) !important;
+    background: linear-gradient(135deg, rgba(10,0,20,0.98) 0%, rgba(30,0,50,0.95) 100%) !important;
+    animation: voidPulse 3s ease-in-out infinite;
+    position: relative; overflow: hidden;
+}
+.trait-card.resource-void::before {
+    content: '◉'; position: absolute; right: 12px; top: 50%;
+    transform: translateY(-50%); font-size: 1.2rem; opacity: 0.3;
+    color: #9c4dff; animation: voidBreath 3s ease-in-out infinite;
+}
+@keyframes voidPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(156,77,255,0.25), inset 0 0 25px rgba(156,77,255,0.08); }
+    50%      { box-shadow: 0 0 55px rgba(156,77,255,0.55), inset 0 0 55px rgba(156,77,255,0.18); }
+}
+@keyframes voidBreath { 0%,100%{opacity:0.2;transform:translateY(-50%) scale(1)} 50%{opacity:0.5;transform:translateY(-50%) scale(1.3)} }
+
+/* ─── 3D RESOURCE BADGES ─── */
+.resource-badge {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: 0.55rem; padding: 2px 8px; border-radius: 6px;
+    margin-top: 5px; font-weight: 700; letter-spacing: 1px;
+}
+.rb-crystal { background: rgba(0,229,255,0.12); color: #00e5ff; border: 1px solid rgba(0,229,255,0.4); text-shadow: 0 0 8px rgba(0,229,255,0.5); }
+.rb-void    { background: rgba(156,77,255,0.12); color: #ce93d8; border: 1px solid rgba(156,77,255,0.4); text-shadow: 0 0 10px rgba(156,77,255,0.5); }
+
+/* ───/* ─── SCROLLBAR ───────────────────────────────── */
+        ::-webkit-scrollbar { width:4px; }
+        ::-webkit-scrollbar-track { background:var(--bg-void); }
+        ::-webkit-scrollbar-thumb { background:rgba(247,147,26,0.16); border-radius:2px; }
+        ::-webkit-scrollbar-thumb:hover { background:rgba(247,147,26,0.35); }
+    </style>
+</head>
+<body>
+<div class="cosmos"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="orb orb-4"></div></div>
+<div class="dot-grid"></div><div class="scanlines"></div>
+<div class="container">
+
+    <!-- ── NAVBAR ── -->
+    <header>
+        <div class="header-left">
+            <h1><span style="display:inline-block;width:0.55em;height:0.55em;background:var(--btc-orange);border-radius:3px;margin-right:10px;vertical-align:middle;box-shadow:0 0 12px var(--btc-glow);flex-shrink:0;"></span>Bitcoin Universe</h1>
+            <p class="subtitle">// deterministic star systems from block consensus data</p>
+        </div>
+        <div class="controls">
+            <button class="nav-btn" id="prevBtn" onclick="navigateBlock(-1)" title="Previous block">&#9664; Prev</button>
+            <div class="input-group">
+                <label for="blockInput">Block</label>
+                <input type="number" id="blockInput" value="840000" min="0">
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="navigateBlock(1)" title="Next block">Next &#9654;</button>
+            <div class="controls-divider"></div>
+            <button id="exploreBtn" onclick="exploreWorld()">&#x1F52D; Scan</button>
+            <button class="random-btn" id="randomBtn" onclick="exploreRandom()">&#x1F3B2; Warp</button>
+            <button class="share-btn" id="shareBtn" onclick="shareWorld()">&#x1F517; Share</button>
+            <div class="controls-divider"></div>
+            <div class="theme-toggle">
+                <button class="theme-btn active" id="themeDark"  onclick="setTheme('dark')">&#x25CF; Dark</button>
+                <button class="theme-btn"         id="themeLight" onclick="setTheme('light')">&#x25CB; Light</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="status"></div>
+
+    <!-- ── MAIN GRID ── -->
+    <div class="main-grid" id="resultArea" style="display:none;">
+
+        <!-- LEFT: 3D viewport -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2><span id="worldEmoji">&#x2B50;</span>&nbsp;Star System</h2>
+                <div class="panel-header-meta">
+                    <div class="live-chip"><span class="pulse-dot"></span> Bitcoin Consensus</div>
+                    <span id="worldClassBadge" class="rarity-badge rarity-Common">Common</span>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- system name + controls row -->
+                <div class="viewport-header">
+                    <div class="system-name">
+                        <span class="system-name-ornament">&#x25C8;</span><span id="worldName">840000.bitcoin</span><span class="system-name-ornament">&#x25C8;</span>
+                    </div>
+                    <div class="viewport-right">
+                        <div class="verify-box">
+                            <span class="verify-label">On-chain</span>
+                            <a id="verifyLink" href="https://ordinals.com/r/blockinfo/840000" target="_blank">ordinals.com/r/blockinfo/840000</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 3D canvas -->
+                <div class="three-container" id="threeContainer">
+                    <div class="canvas-loading-overlay" id="canvasLoadingOverlay">
+                        <div class="canvas-loading-spinner"></div>
+                        <div class="loading-text">Rendering system&hellip;</div>
+                    </div>
+                </div>
+                <!-- footer: legend + hint -->
+                <div class="viewport-footer">
+                    <div class="legend-box" id="legendBox"></div>
+                    <span class="controls-hint">drag &nbsp;&#x2022;&nbsp; scroll zoom &nbsp;&#x2022;&nbsp; &#8592;&#8594; navigate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: traits sidebar -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>&#x1F4CB;&nbsp;World Traits</h2>
+            </div>
+            <div class="panel-body-scroll">
+                <div class="section-title">Core Attributes</div>
+                <div class="traits-grid" id="coreTraits"></div>
+
+                <div class="section-title">Stellar &amp; Rarity</div>
+                <div class="traits-grid" id="rarityTraits"></div>
+
+                <div class="section-title">Cosmic Phenomena</div>
+                <div class="flags-list" id="specialFlags"></div>
+
+                <div class="section-title">Namespace</div>
+                <div class="namespace-box">
+                    <div class="ns-label">Parent</div>
+                    <div class="ns-value" id="parentNs">840000.bitcoin</div>
+                    <div style="font-size:0.68rem;color:var(--text-muted);margin-top:8px;">Child: <code>&lt;label&gt;.&lt;height&gt;.bitcoin</code></div>
+                    <div class="hash-preview-label">Block Hash Entropy</div>
+                    <div id="hashPreview"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="success-toast" id="toast">&#x2705; Link copied</div>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const container = document.getElementById('threeContainer');
+const statusDiv = document.getElementById('status');
+const overlay = document.getElementById('canvasLoadingOverlay');
+
+if (!window.WebGLRenderingContext) {
+    statusDiv.innerHTML = '<div class="error">🚫 WebGL not supported. Please use a modern browser.</div>';
+    throw new Error('WebGL not available');
+}
+if (window.location.protocol === 'file:') {
+    statusDiv.innerHTML = `<div class="error">⚠️ Cannot load from file:// – please serve via a local web server.<br><small>Try: <code>npx serve .</code> or <code>python -m http.server 8000</code></small></div>`;
+    throw new Error('File protocol not allowed for ES modules');
+}
+
+const BIOMES = ['Ocean','Desert','Forest','Snowfield','Volcano'];
+const WEATHERS = ['Sunny','Rain','Storm','Snow'];
+const BIOME_EMOJIS = {'Ocean':'🌊','Desert':'🏜️','Forest':'🌳','Snowfield':'❄️','Volcano':'🌋'};
+const CIVILIZATIONS = [
+    { name:'Primordial / Empty', range:[0,1] }, { name:'Ancient / Sparse', range:[2,100] },
+    { name:'Settled / Medieval', range:[101,1000] }, { name:'Industrial / Dense', range:[1001,5000] },
+    { name:'Metropolitan', range:[5001,7000] }, { name:'Megacity', range:[7001,8000] },
+    { name:'Ecumenopolis', range:[8001,Infinity] }
+];
+const ECONOMIES = [
+    { name:'Primordial', range:[0,0] },
+    { name:'Agricultural', range:[1,10000] },
+    { name:'Mercantile', range:[10001,1000000] },
+    { name:'Industrial Empire', range:[1000001,50000000] },
+    { name:'Post-Scarcity', range:[50000001,100000000] },
+    { name:'Singularity', range:[100000001,499999999] },
+    { name:'Omega', range:[500000000,Infinity] }
+];
+const WORLD_CLASSES = [
+    { name:'Common', min:0, max:8, spectral:'M', color:'#ff6b35', glow:'#ff9f1c', baseRadius:1.2 },
+    { name:'Uncommon', min:9, max:9, spectral:'G', color:'#ffd166', glow:'#ffea00', baseRadius:1.6 },
+    { name:'Rare', min:10, max:10, spectral:'F', color:'#fffae5', glow:'#ffffff', baseRadius:2.0 },
+    { name:'Epic', min:11, max:11, spectral:'A', color:'#d4f1f9', glow:'#ffffff', baseRadius:2.5 },
+    { name:'Legendary', min:12, max:20, spectral:'B', color:'#a0c4ff', glow:'#cce7ff', baseRadius:3.2 },
+    { name:'Mythic', min:21, max:22, spectral:'O', color:'#9bf6ff', glow:'#caf0f8', baseRadius:4.0 },
+    { name:'Transcendent', min:23, max:Infinity, spectral:'Ω', color:'#ffffff', glow:'#e0f7fa', baseRadius:5.0 }
+];
+const RESOURCES = [
+    { name:'Stone',       range:[0,   145], tier:'Common'   },  // 57.03%
+    { name:'Iron',        range:[146, 243], tier:'Common'   },  // 38.28%
+    { name:'Gold',        range:[244, 251], tier:'Uncommon' },  //  3.13%
+    { name:'Crystal',     range:[252, 254], tier:'Rare'     },  //  1.17%
+    { name:'Void Matter', range:[255, 255], tier:'Epic'     },  //  0.39% — 1-in-256
+];
+const RESOURCE_COLORS = {
+    'Stone':       0x8B7D6B,
+    'Iron':        0x708090,
+    'Gold':        0xFFD700,
+    'Crystal':     0xE0FFFF,
+    'Void Matter': 0x4B0082
+};
+const ERAS = [
+    { name:'Genesis Era', subsidy:5000000000, blocks:'0–209,999' }, { name:'Pioneer Era', subsidy:2500000000, blocks:'210,000–419,999' },
+    { name:'Growth Era', subsidy:1250000000, blocks:'420,000–629,999' }, { name:'Maturity Era', subsidy:625000000, blocks:'630,000–839,999' },
+    { name:'Sovereign Era', subsidy:312500000, blocks:'840,000–1,049,999' }, { name:'Post-Sovereign Era', subsidy:156250000, blocks:'1,050,000+' }
+];
+
+const blockCache = new Map();
+const MAX_CACHE_SIZE = 30;
+
+function mulberry32(a) { return function() { let t = a += 0x6D2B79F5; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function createSeededRandom(hash) { let seed = 0; for (let i = 0; i < hash.length; i++) seed = (seed * 31 + hash.charCodeAt(i)) >>> 0; return mulberry32(seed); }
+function computeBiome(hash) { const byte = parseInt(hash.substring(18,20),16); const idx = byte % 5; return { name:BIOMES[idx], index:idx, byte }; }
+function computeWeather(hash) { const byte = parseInt(hash.substring(2,4),16); const idx = byte % 4; return { name:WEATHERS[idx], index:idx, byte }; }
+function computeCivilization(txCount) { for (const civ of CIVILIZATIONS) if (txCount >= civ.range[0] && txCount <= civ.range[1]) return civ.name; return CIVILIZATIONS[CIVILIZATIONS.length-1].name; }
+function computeCivilizationIndex(txCount) { for (let i=0; i<CIVILIZATIONS.length; i++) if (txCount >= CIVILIZATIONS[i].range[0] && txCount <= CIVILIZATIONS[i].range[1]) return i; return CIVILIZATIONS.length-1; }
+function computeEconomy(totalFee) { for (const eco of ECONOMIES) if (totalFee >= eco.range[0] && totalFee <= eco.range[1]) return eco.name; return ECONOMIES[ECONOMIES.length-1].name; }
+function computeWorldClass(hash) { let zeros = 0; for (const char of hash) { if (char === '0') zeros++; else break; } for (const cls of WORLD_CLASSES) if (zeros >= cls.min && zeros <= cls.max) return { ...cls, zeros }; const transcendent = WORLD_CLASSES[WORLD_CLASSES.length-1]; return { ...transcendent, zeros }; }
+function computeResource(merkleRoot) { const byte = parseInt(merkleRoot.substring(0,2),16); for (const res of RESOURCES) if (byte >= res.range[0] && byte <= res.range[1]) return { name:res.name, byte, tier:res.tier }; return { name:RESOURCES[RESOURCES.length-1].name, byte, tier:RESOURCES[RESOURCES.length-1].tier }; }
+function computeEra(subsidy) { const sats = Number(subsidy); for (const era of ERAS) if (sats === era.subsidy) return { name:era.name, blocks:era.blocks }; if (sats > 0 && sats < 156250000) return { name:'Post-Sovereign Era', blocks:'1,050,000+' }; if (sats === 0) return { name:'Terminal Era', blocks:'~block 6,930,000+' }; return { name:'Unknown Era', blocks:'?' }; }
+function computeTimeModifiers(timestamp) { const date = new Date(timestamp * 1000); const hour = date.getUTCHours(); const day = date.getUTCDay(); const isMidnight = hour === 0 || hour === 1 || hour === 23; const isWeekend = day === 0 || day === 6; let modifier = ''; if (isMidnight && isWeekend) modifier = 'Void Midnight'; else if (isMidnight) modifier = 'Midnight'; else if (isWeekend) modifier = 'Weekend Pulse'; else modifier = 'Standard'; return { isMidnight, isWeekend, modifier, hour, day }; }
+function hasPalindromeOfMinLength(str, minLength) { const n = str.length; for (let c=0; c<n; c++) { let l=c, r=c; while(l>=0 && r<n && str[l]===str[r]){ if(r-l+1 >= minLength) return true; l--; r++; } } for (let c=0; c<n-1; c++) { let l=c, r=c+1; while(l>=0 && r<n && str[l]===str[r]){ if(r-l+1 >= minLength) return true; l--; r++; } } return false; }
+function isPrime(n) { if(n<2) return false; if(n===2||n===3) return true; if(n%2===0||n%3===0) return false; const limit=Math.sqrt(n); for(let i=5;i<=limit;i+=6) if(n%i===0||n%(i+2)===0) return false; return true; }
+function isFibonacci(n) { if(n<0) return false; const t1=5*n*n+4, t2=5*n*n-4; return isPerfectSquare(t1)||isPerfectSquare(t2); }
+function isPerfectSquare(x) { const s=Math.floor(Math.sqrt(x)); return s*s===x; }
+function hasPalindromeInNumber(num, minLength) { const str = num.toString(); const n = str.length; for (let c = 0; c < n; c++) { let l = c, r = c; while (l >= 0 && r < n && str[l] === str[r]) { const len = r - l + 1; if (len >= minLength) { const sub = str.slice(l, r + 1); if (!/^(.)\1+$/.test(sub)) return true; } l--; r++; } l = c; r = c + 1; while (l >= 0 && r < n && str[l] === str[r]) { const len = r - l + 1; if (len >= minLength) { const sub = str.slice(l, r + 1); if (!/^(.)\1+$/.test(sub)) return true; } l--; r++; } } return false; }
+function isPowerOfTwo(n) { return n > 0 && (n & (n - 1)) === 0; }
+function isPowerOfThree(n) { if (n < 1) return false; while (n % 3 === 0) n /= 3; return n === 1; }
+function isFactorial(n) { if (n <= 0) return false; let i = 1; let fact = 1; while (fact < n) { i++; fact *= i; } return fact === n; }
+// Genesis Signal: blocks confirmed to contain the pattern '20090103'
+// inside one or more transaction hashes on ordinals.com/block/{height}.
+// The pattern encodes Bitcoin's birthday: January 3, 2009 (block 0).
+// ~23 known across ~950,000 blocks — the rarest flag in Bitcoin Universe.
+const GENESIS_SIGNAL_BLOCKS = new Set([
+    851335, 828188, 827406, 826296, 732952, 719123, 771861, 641609,
+    507904, 507036, 559958, 450967, 496495, 350315, 351614, 826407,
+    595616, 878452, 883473, 897414, 920323, 936476, 941404
+]);
+
+function checkSpecialFlags(height, hash, timestamp) {
+    const hashLower = hash.toLowerCase();
+    const flags = [];
+    // ── GENESIS SIGNAL ──────────────────────────────────────────────────
+    // Detected via curated allowlist: the pattern '20090103' appears inside
+    // one or more transaction hashes on the block page (ordinals.com/block/N).
+    // Not derivable from blockinfo API fields — verified manually per block.
+    const isGenesis = GENESIS_SIGNAL_BLOCKS.has(height);
+    if (isGenesis) flags.push({ name:'Genesis Signal', active:true,  icon:'🌅', genesis:true, desc:'20090103 found in tx hashes · Bitcoin\'s birthday' });
+    else           flags.push({ name:'Genesis Signal', active:false, icon:'🌅', genesis:true });
+
+    if (height % 210000 === 0 && height > 0) flags.push({ name:'Nova Event', active:true, icon:'💥', desc:`${height/210000}th halving` });
+    else flags.push({ name:'Nova Event', active:false, icon:'💥' });
+    if (height % 2016 === 0 && height > 0) flags.push({ name:'Quantum Shift', active:true, icon:'⚛️', desc:'Difficulty epoch' });
+    else flags.push({ name:'Quantum Shift', active:false, icon:'⚛️' });
+    const { isWeekend, isMidnight } = computeTimeModifiers(timestamp);
+    flags.push({ name:'Weekend Pulse', active:isWeekend, icon:'📅' });
+    flags.push({ name:'Void Midnight', active:isMidnight, icon:'🌙' });
+    const sig21e8idx = hashLower.indexOf('21e8');
+    if (sig21e8idx !== -1) flags.push({ name:'Cosmic Signature', active:true, icon:'✨', desc:`21e8 at pos ${sig21e8idx}` });
+    else flags.push({ name:'Cosmic Signature', active:false, icon:'✨' });
+    const runMatch = hashLower.match(/(.)\1{3,}/);
+    if (runMatch) flags.push({ name:'Cosmic Echo', active:true, icon:'🔁', desc:`${runMatch[0].length}× '${runMatch[0][0]}'` });
+    else flags.push({ name:'Cosmic Echo', active:false, icon:'🔁' });
+    flags.push({ name:'Symmetric Nebula', active: hasPalindromeInNumber(height, 3), icon:'🪞' });
+    flags.push({ name:'Prime Alignment', active: isPrime(height), icon:'🔢' });
+    flags.push({ name:'Harmonic Sequence', active: isFibonacci(height), icon:'📐' });
+    flags.push({ name:'Primordial Age', active: height < 1000, icon:'🔥' });
+    flags.push({ name:'Binary Nexus', active: isPowerOfTwo(height), icon:'2️⃣' });
+    flags.push({ name:'Ternary Resonance', active: isPowerOfThree(height), icon:'3️⃣' });
+    flags.push({ name:'Exponential Crest', active: isFactorial(height), icon:'!' });
+    return flags;
+}
+
+let scene, camera, renderer, controls, systemGroup, animationId;
+let nebulaParticles = [], cageWires = [], fieldParticles = null;
+let animTime = 0;
+
+const BIOME_PALETTE = {
+    'Ocean':     { core:[0x4fc3f7,0x1a88c9,0xffffff], field:[0xff4444,0xffaa44,0xffffff], cage:0x3a6fff },
+    'Desert':    { core:[0xffcc44,0xff7700,0xffffff], field:[0xff4444,0xffffff,0xffcc44], cage:0xff8800 },
+    'Forest':    { core:[0x69f0ae,0x00c853,0xffffff], field:[0xff4444,0x44ffcc,0xffffff], cage:0x00e676 },
+    'Snowfield': { core:[0xe0f7fa,0x80deea,0xffffff], field:[0xaad4f5,0xffffff,0xcceeff], cage:0x40c4ff },
+    'Volcano':   { core:[0xff5722,0xff1744,0xffcc00], field:[0xff8800,0xff4400,0xffcc00], cage:0xff3d00 },
+};
+function getBiomePalette(biome) { return BIOME_PALETTE[biome] || BIOME_PALETTE['Ocean']; }
+function makeGlowSprite(color, size=128) { const c = document.createElement('canvas'); c.width = c.height = size; const ctx = c.getContext('2d'); const g = ctx.createRadialGradient(size/2,size/2,0, size/2,size/2,size/2); const hex = '#'+color.toString(16).padStart(6,'0'); g.addColorStop(0, hex+'ff'); g.addColorStop(0.15, hex+'cc'); g.addColorStop(0.4, hex+'55'); g.addColorStop(1, hex+'00'); ctx.fillStyle = g; ctx.fillRect(0,0,size,size); return new THREE.CanvasTexture(c); }
+function buildGeoCage(radius, color, opacity) { const geo = new THREE.IcosahedronGeometry(radius, 1); const edges = new THREE.EdgesGeometry(geo); const mat = new THREE.LineBasicMaterial({ color, transparent:true, opacity, blending:THREE.AdditiveBlending, depthWrite:false }); return new THREE.LineSegments(edges, mat); }
+function initThree() {
+    scene = new THREE.Scene(); scene.background = new THREE.Color(0x000005);
+    camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 800);
+    camera.position.set(0, 0, 32); camera.lookAt(0, 0, 0);
+    renderer = new THREE.WebGLRenderer({ antialias:true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.05; controls.minDistance = 10; controls.maxDistance = 80;
+    controls.autoRotate = true; controls.autoRotateSpeed = 0.35; controls.target.set(0,0,0); controls.update();
+    // Layer 1: dense distant background (3000)
+    { const n=3000, pos=new Float32Array(n*3); for(let i=0;i<n*3;i+=3){const r=120+Math.random()*280,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos[i]=Math.cos(t)*Math.sin(p)*r;pos[i+1]=Math.sin(t)*Math.sin(p)*r;pos[i+2]=Math.cos(p)*r;} const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));scene.add(new THREE.Points(g,new THREE.PointsMaterial({map:makeGlowSprite(0xffffff,32),size:0.50,transparent:true,opacity:0.75,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}))); }
+    // Layer 2: mid-range warm stars (1000)
+    { const n=1000, pos=new Float32Array(n*3); for(let i=0;i<n*3;i+=3){const r=70+Math.random()*160,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos[i]=Math.cos(t)*Math.sin(p)*r;pos[i+1]=Math.sin(t)*Math.sin(p)*r;pos[i+2]=Math.cos(p)*r;} const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));scene.add(new THREE.Points(g,new THREE.PointsMaterial({map:makeGlowSprite(0xffeedd,32),size:0.80,transparent:true,opacity:0.65,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}))); }
+    // Layer 3: bright foreground sparkles (400)
+    { const n=400, pos=new Float32Array(n*3); for(let i=0;i<n*3;i+=3){const r=50+Math.random()*100,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos[i]=Math.cos(t)*Math.sin(p)*r;pos[i+1]=Math.sin(t)*Math.sin(p)*r;pos[i+2]=Math.cos(p)*r;} const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));scene.add(new THREE.Points(g,new THREE.PointsMaterial({map:makeGlowSprite(0xaaddff,32),size:1.20,transparent:true,opacity:0.55,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}))); }
+    // Layer 4: purple nebula haze (350)
+    { const n=350, pos=new Float32Array(n*3); for(let i=0;i<n*3;i+=3){const r=100+Math.random()*250,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos[i]=Math.cos(t)*Math.sin(p)*r;pos[i+1]=Math.sin(t)*Math.sin(p)*r;pos[i+2]=Math.cos(p)*r;} const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));scene.add(new THREE.Points(g,new THREE.PointsMaterial({map:makeGlowSprite(0x9c4dff,32),size:1.50,transparent:true,opacity:0.14,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}))); }
+    // Layer 5: orange nebula haze (250)
+    { const n=250, pos=new Float32Array(n*3); for(let i=0;i<n*3;i+=3){const r=110+Math.random()*220,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);pos[i]=Math.cos(t)*Math.sin(p)*r;pos[i+1]=Math.sin(t)*Math.sin(p)*r;pos[i+2]=Math.cos(p)*r;} const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));scene.add(new THREE.Points(g,new THREE.PointsMaterial({map:makeGlowSprite(0xf7931a,32),size:1.30,transparent:true,opacity:0.10,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}))); }
+    systemGroup = new THREE.Group(); scene.add(systemGroup);
+    function animate() {
+        animationId = requestAnimationFrame(animate); animTime += 0.008; controls.update();
+        cageWires.forEach((w,i) => {
+            if (w.userData.genRing) { w.rotation.y += w.userData.spinSpeed; w.rotation.x += w.userData.spinSpeed*0.4; return; }
+            if (w.userData.genBeam) { w.material.opacity = w.userData.baseOp*(0.3+0.7*Math.sin(animTime*w.userData.pulseSpeed)); return; }
+            if (w.userData.spinX) w.rotation.x += w.userData.spinX;
+            else w.rotation.x += 0.0025 * (i%2===0?1:-1);
+            if (w.userData.spinY) w.rotation.y += w.userData.spinY;
+            else w.rotation.y += 0.003 * (i%2===0?1:-1);
+            if (w.userData.spinZ) w.rotation.z += w.userData.spinZ;
+            else w.rotation.z += 0.002;
+        });
+        nebulaParticles.forEach((p, i) => {
+            if (p.userData.genOrbit) {
+                p.userData.orbitAngle += 0.006;
+                const a = p.userData.orbitAngle, r = p.userData.orbitR;
+                p.position.set(Math.cos(a)*r, Math.sin(a)*r*0.32, Math.sin(a)*r*0.55);
+                p.material.opacity = p.userData.baseOp*(0.5+0.5*Math.sin(animTime*p.userData.twinkleSpeed+i));
+                return;
+            }
+            if (p.userData.vel) { p.position.addScaledVector(p.userData.vel, 0.008); const d = p.position.length(); if (d > p.userData.maxR) p.userData.vel.negate(); if (d < 0.1) p.userData.vel.negate(); }
+            if (p.userData.twinkleSpeed) {
+                const s = p.userData.baseScale * (0.4 + 0.6 * Math.sin(animTime * p.userData.twinkleSpeed + i));
+                p.scale.setScalar(s);
+            } else {
+                const s = 1 + 0.12 * Math.sin(animTime * 1.8 + i * 0.37);
+                p.scale.setScalar(s);
+            }
+        });
+        renderer.render(scene, camera);
+    }
+    animate();
+    window.addEventListener('resize', ()=>{ if(!container||!camera||!renderer) return; camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
+}
+function clearSystemGroup() { cageWires = []; nebulaParticles = []; fieldParticles = null; while(systemGroup.children.length){ const c = systemGroup.children[0]; if(c.geometry) c.geometry.dispose(); if(c.material){ if(Array.isArray(c.material)) c.material.forEach(m=>m.dispose()); else c.material.dispose(); } systemGroup.remove(c); } }
+
+function buildStarSystem(traits) {
+    clearSystemGroup();
+    overlay.classList.remove('hidden');
+    const rng = createSeededRandom(traits.hash);
+    const pal = getBiomePalette(traits.biome);
+    const worldClass = traits.worldClass;
+    const civLvl = traits.civilizationLevel;
+    const RARITY_CFG = {
+        Common:       { coreBase:12,  fieldBase:20,  heartCt:0,  cages:0, outerCage:false, rings:0, opMin:0.25, opMax:0.50, szMin:10, szMax:22 },
+        Uncommon:     { coreBase:28,  fieldBase:38,  heartCt:4,  cages:1, outerCage:false, rings:0, opMin:0.35, opMax:0.60, szMin:14, szMax:28 },
+        Rare:         { coreBase:48,  fieldBase:60,  heartCt:6,  cages:1, outerCage:false, rings:0, opMin:0.45, opMax:0.72, szMin:16, szMax:34 },
+        Epic:         { coreBase:72,  fieldBase:88,  heartCt:8,  cages:2, outerCage:false, rings:0, opMin:0.55, opMax:0.82, szMin:18, szMax:40 },
+        Legendary:    { coreBase:105, fieldBase:128, heartCt:12, cages:2, outerCage:true,  rings:2, opMin:0.65, opMax:0.90, szMin:20, szMax:50 },
+        Mythic:       { coreBase:200, fieldBase:240, heartCt:24, cages:4, outerCage:true,  rings:4, opMin:0.80, opMax:1.00, szMin:24, szMax:64 },
+        Transcendent: { coreBase:280, fieldBase:320, heartCt:32, cages:5, outerCage:true,  rings:6, opMin:0.90, opMax:1.00, szMin:28, szMax:72 },
+    };
+    const cfg = RARITY_CFG[worldClass.name] || RARITY_CFG.Common;
+    const coreCount  = cfg.coreBase  + civLvl * 12;
+    const fieldCount = cfg.fieldBase  + civLvl * 8;
+    const rarityScale = {Common:0.80, Uncommon:0.92, Rare:1.05, Epic:1.20, Legendary:1.45, Mythic:1.75, Transcendent:2.10};
+    const scale = rarityScale[worldClass.name] || 1;
+    const coreRadius = 3.2 * scale;
+
+    // Core nebula particles
+    for(let i = 0; i < coreCount; i++){
+        const color = pal.core[Math.floor(rng() * pal.core.length)];
+        const sz = (cfg.szMin + rng()*(cfg.szMax - cfg.szMin)) * scale;
+        const opacity = cfg.opMin + rng()*(cfg.opMax - cfg.opMin);
+        const tex = makeGlowSprite(color, 64);
+        const spriteMat = new THREE.SpriteMaterial({ map:tex, blending:THREE.AdditiveBlending, transparent:true, opacity, depthWrite:false });
+        const sprite = new THREE.Sprite(spriteMat);
+        const r = rng()*coreRadius;
+        const theta = rng()*Math.PI*2;
+        const phi = Math.acos(2*rng()-1);
+        sprite.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.sin(phi)*Math.sin(theta)*0.65, r*Math.cos(phi));
+        sprite.scale.setScalar(sz * 0.1);
+        const vel = new THREE.Vector3((rng()-0.5)*0.4, (rng()-0.5)*0.25, (rng()-0.5)*0.4);
+        sprite.userData = { vel, maxR: coreRadius * 0.95 };
+        systemGroup.add(sprite);
+        nebulaParticles.push(sprite);
+    }
+    // Bright heart
+    if(cfg.heartCt > 0){
+        const wcColorInt = parseInt(worldClass.color.replace('#',''), 16);
+        const heartColors = [0xffffff, 0xffeedd, wcColorInt];
+        for(let i=0; i<cfg.heartCt; i++){
+            const color = heartColors[i % heartColors.length];
+            const tex = makeGlowSprite(color, 64);
+            const mat = new THREE.SpriteMaterial({ map:tex, blending:THREE.AdditiveBlending, transparent:true, opacity: 0.70 + rng()*0.30, depthWrite:false });
+            const sprite = new THREE.Sprite(mat);
+            const r = rng()*coreRadius*0.30;
+            const t = rng()*Math.PI*2, p = Math.acos(2*rng()-1);
+            sprite.position.set(r*Math.sin(p)*Math.cos(t), r*Math.sin(p)*Math.sin(t)*0.6, r*Math.cos(p));
+            sprite.scale.setScalar((cfg.szMin * 0.9 + rng()*cfg.szMin) * scale * 0.1);
+            systemGroup.add(sprite);
+            nebulaParticles.push(sprite);
+        }
+    }
+    // Geodesic cages
+    if(cfg.cages > 0){
+        const cageColor = parseInt(worldClass.color.replace('#',''), 16);
+        for(let l=0; l<cfg.cages; l++){
+            const cageR = coreRadius*(1.06 + l*0.40);
+            const cage = buildGeoCage(cageR, cageColor, 0.55 - l*0.12);
+            systemGroup.add(cage);
+            cageWires.push(cage);
+            if(cfg.outerCage){
+                const outer = buildGeoCage(cageR*1.18, pal.cage, 0.24 - l*0.05);
+                systemGroup.add(outer);
+                cageWires.push(outer);
+            }
+        }
+    }
+    // Field particles
+    const fieldPos = new Float32Array(fieldCount * 3);
+    const fieldColBuf = new Float32Array(fieldCount * 3);
+    const innerBound = coreRadius * (cfg.cages > 0 ? 1.65 : 1.35);
+    const outerBound = 9 * scale;
+    for(let i=0; i<fieldCount; i++){
+        let x,y,z,dist; let guard = 0;
+        do { x=(rng()-0.5)*outerBound*2; y=(rng()-0.5)*outerBound*2*0.7; z=(rng()-0.5)*outerBound*2; dist = Math.sqrt(x*x+y*y+z*z); guard++; } while((dist < innerBound || dist > outerBound) && guard < 40);
+        fieldPos[i*3]=x; fieldPos[i*3+1]=y; fieldPos[i*3+2]=z;
+        const fc = pal.field[Math.floor(rng()*pal.field.length)];
+        fieldColBuf[i*3] = ((fc>>16)&0xff)/255; fieldColBuf[i*3+1] = ((fc>>8)&0xff)/255; fieldColBuf[i*3+2] = (fc&0xff)/255;
+    }
+    const fGeo = new THREE.BufferGeometry(); fGeo.setAttribute('position', new THREE.BufferAttribute(fieldPos,3)); fGeo.setAttribute('color', new THREE.BufferAttribute(fieldColBuf,3));
+    const fieldTex = makeGlowSprite(0xffffff, 64);
+    const fieldOpacity = cfg.opMin * 0.9;
+    const fieldSize = (0.55 + (cfg.coreBase / 280) * 0.75) * scale;
+    fieldParticles = new THREE.Points(fGeo, new THREE.PointsMaterial({ map:fieldTex, size:fieldSize, vertexColors:true, transparent:true, opacity:fieldOpacity, blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true }));
+    systemGroup.add(fieldParticles);
+    // Aura rings
+    if(cfg.rings > 0){
+        let ringColors;
+        if (worldClass.name === 'Transcendent') ringColors = [0xffffff, 0x00e5ff, 0x2979ff, 0x9c4dff, 0xff1744, 0xffab40];
+        else if (worldClass.name === 'Mythic') ringColors = [0xff2244, 0xff7700, 0xffcc00, 0xff4400];
+        else ringColors = [0xffab40, 0xffd700];
+        for(let ri=0; ri<cfg.rings; ri++){
+            const rc = ringColors[ri % ringColors.length];
+            const torusR = coreRadius*(1.3 + ri*0.22);
+            const tGeo = new THREE.TorusGeometry(torusR, 0.04, 8, 120);
+            const tMat = new THREE.MeshBasicMaterial({ color:rc, transparent:true, opacity:0.45-ri*0.08, blending:THREE.AdditiveBlending, depthWrite:false });
+            const torus = new THREE.Mesh(tGeo, tMat);
+            torus.rotation.x = Math.PI/3 + ri*0.42;
+            torus.rotation.z = ri*0.62;
+            systemGroup.add(torus);
+            cageWires.push(torus);
+        }
+    }
+
+    // ---- ECONOMIC & MATHEMATICAL ENHANCEMENTS (Post-Scarcity, Singularity, Omega) ----
+    const isRareMath = traits.flags.some(f => (f.name === 'Binary Nexus' || f.name === 'Ternary Resonance' || f.name === 'Exponential Crest') && f.active === true);
+    const economy = traits.economy;
+    const isPostScarcity = (economy === 'Post-Scarcity');
+    const isSingularity = (economy === 'Singularity');
+    const isOmega = (economy === 'Omega');
+
+    let centralOrb = null; // define here so it exists even if no econ/math enhancements
+
+    if (isRareMath || isPostScarcity || isSingularity || isOmega) {
+        console.log(`✨ EXTRAORDINARY EVENT: Math=${isRareMath}, Economy=${economy}`);
+        let tier = 0;
+        if (isOmega) tier = 3;
+        else if (isSingularity) tier = 2;
+        else if (isPostScarcity) tier = 1;
+        else if (isRareMath) tier = 1;
+
+        let orbColor = 0xffaa88;
+        let orbSizeMult = 1.1;
+        if (tier === 3) { orbColor = 0xffaa66; orbSizeMult = 1.4; }
+        else if (tier === 2) { orbColor = 0xff8866; orbSizeMult = 1.2; }
+        else if (tier === 1) { orbColor = 0x44aaff; orbSizeMult = 1.1; }
+        const orbTex = makeGlowSprite(orbColor, 256);
+        const orbMat = new THREE.SpriteMaterial({ map: orbTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.95, depthWrite: false });
+        centralOrb = new THREE.Sprite(orbMat);
+        centralOrb.scale.setScalar(coreRadius * orbSizeMult);
+        centralOrb.position.set(0, 0, 0);
+        systemGroup.add(centralOrb);
+        nebulaParticles.push(centralOrb);
+
+        const spiralCount = (tier === 3) ? 160 : (tier === 2 ? 120 : 80);
+        const spiralColor = (tier === 3) ? 0xffaa66 : (tier === 2 ? 0xff6666 : 0x66ccff);
+        for (let i = 0; i < spiralCount; i++) {
+            const t = i / spiralCount;
+            const angle = t * Math.PI * 8;
+            const radius = coreRadius * (1.0 + t * 1.4);
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            const y = Math.sin(angle * 2) * radius * 0.5;
+            const tex = makeGlowSprite(spiralColor, 32);
+            const sMat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9, depthWrite: false });
+            const particle = new THREE.Sprite(sMat);
+            particle.position.set(x, y, z);
+            particle.scale.setScalar(tier === 3 ? 0.35 : 0.25);
+            systemGroup.add(particle);
+            nebulaParticles.push(particle);
+        }
+
+        const ringCount = (tier === 3) ? 5 : (tier === 2 ? 3 : 2);
+        const ringColorPalettes = { 3:[0xff4488,0xff9900,0xffee00,0x44ffcc,0x8844ff], 2:[0xffd700,0xff6600,0xffaa00], 1:[0x44ccff,0x66ffaa] };
+        const ringPalette = ringColorPalettes[tier] || ringColorPalettes[1];
+        for (let rIdx = 0; rIdx < ringCount; rIdx++) {
+            const ringRadius = coreRadius * (1.28 + rIdx * 0.22);
+            const ringColor = ringPalette[rIdx % ringPalette.length];
+            const ringMat = new THREE.MeshBasicMaterial({ color: ringColor, transparent: true, opacity: 0.75 - rIdx * 0.08, blending: THREE.AdditiveBlending });
+            const ringGeo = new THREE.TorusGeometry(ringRadius, 0.045, 16, 160);
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2 + rIdx * 0.28;
+            ring.rotation.z = rIdx * 0.45;
+            systemGroup.add(ring);
+            cageWires.push(ring);
+        }
+
+        const opacityBoost = (tier === 3) ? 0.4 : (tier === 2 ? 0.3 : 0.2);
+        nebulaParticles.forEach(p => { if (p.material) p.material.opacity = Math.min(p.material.opacity + opacityBoost, 1.0); });
+        if (fieldParticles) fieldParticles.material.size *= (tier === 3 ? 1.6 : (tier === 2 ? 1.4 : 1.2));
+
+        if (tier === 3) {
+            const arcCount = 12;
+            const arcRadius = coreRadius * 1.9;
+            for (let i = 0; i < arcCount; i++) {
+                const angle = (i / arcCount) * Math.PI * 2;
+                const x = Math.cos(angle) * arcRadius;
+                const z = Math.sin(angle) * arcRadius;
+                const y = Math.sin(angle * 3) * arcRadius * 0.6;
+                const points = [];
+                points.push(new THREE.Vector3(x, y, z));
+                points.push(new THREE.Vector3(x * 1.1, y * 1.1, z * 1.1));
+                const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                const lineMat = new THREE.LineBasicMaterial({ color: 0xffaa66, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+                const arcLine = new THREE.Line(lineGeo, lineMat);
+                systemGroup.add(arcLine);
+                cageWires.push(arcLine);
+            }
+        }
+    }
+
+    // ══ GENESIS SIGNAL — 3D visuals ════════════════════════════════════════
+    const isGenesisBlock = traits.flags.some(f => f.genesis && f.active);
+    if (isGenesisBlock) {
+        console.log('🌅 GENESIS SIGNAL — Bitcoin Birthday Block! Height:', traits.height);
+
+        // 1. Blazing white-gold core (largest glow in the system)
+        const gCoreTex = makeGlowSprite(0xfffde7, 512);
+        const gCoreSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map:gCoreTex, blending:THREE.AdditiveBlending, transparent:true, opacity:1.0, depthWrite:false }));
+        gCoreSpr.scale.setScalar(coreRadius * 2.5);
+        systemGroup.add(gCoreSpr); nebulaParticles.push(gCoreSpr);
+
+        // 2. Warm gold secondary bloom
+        const gBloomTex = makeGlowSprite(0xffd700, 256);
+        const gBloomSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map:gBloomTex, blending:THREE.AdditiveBlending, transparent:true, opacity:0.82, depthWrite:false }));
+        gBloomSpr.scale.setScalar(coreRadius * 4.5);
+        systemGroup.add(gBloomSpr); nebulaParticles.push(gBloomSpr);
+
+        // 3. Three concentric tilted golden rings — the "sunrise halo"
+        [[0xfffde7,1.55,0.90,0.0032],[0xffd700,1.95,0.72,0.0022],[0xffab40,2.42,0.55,0.0014]].forEach(([col,sz,op,spd],ri) => {
+            const rg = new THREE.TorusGeometry(coreRadius*sz, 0.068-ri*0.015, 16, 200);
+            const rm = new THREE.MeshBasicMaterial({ color:col, transparent:true, opacity:op, blending:THREE.AdditiveBlending, depthWrite:false });
+            const ring = new THREE.Mesh(rg, rm);
+            ring.rotation.x = Math.PI/2 + ri*0.38; ring.rotation.z = ri*0.55;
+            ring.userData = { genRing:true, spinSpeed:spd };
+            systemGroup.add(ring); cageWires.push(ring);
+        });
+
+        // 4. Sacred icosahedron wireframe in gold
+        const sacGeo = new THREE.IcosahedronGeometry(coreRadius*1.2, 1);
+        const sacEdg = new THREE.EdgesGeometry(sacGeo);
+        const sacMat = new THREE.LineBasicMaterial({ color:0xffd700, transparent:true, opacity:0.62, blending:THREE.AdditiveBlending, depthWrite:false });
+        const sacred = new THREE.LineSegments(sacEdg, sacMat);
+        sacred.userData = { spinX:0.004, spinY:0.006 };
+        systemGroup.add(sacred); cageWires.push(sacred);
+
+        // 5. 16 radial light beams pulsing outward — dawn rays
+        for (let i=0; i<16; i++) {
+            const a = (i/16)*Math.PI*2;
+            const bLen = coreRadius*(2.5+Math.random()*0.9);
+            const pts = [
+                new THREE.Vector3(Math.cos(a)*coreRadius*0.3, 0, Math.sin(a)*coreRadius*0.3),
+                new THREE.Vector3(Math.cos(a)*bLen, Math.sin(a*2.5)*bLen*0.18, Math.sin(a)*bLen)
+            ];
+            const bm = new THREE.LineBasicMaterial({ color:i%3===0?0xfffde7:0xffd700, transparent:true, opacity:0.55, blending:THREE.AdditiveBlending, depthWrite:false });
+            const beam = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), bm);
+            beam.userData = { genBeam:true, pulseSpeed:0.8+Math.random()*1.4, baseOp:0.55 };
+            systemGroup.add(beam); cageWires.push(beam);
+        }
+
+        // 6. 24 orbiting dawn particles — orbit of creation
+        for (let i=0; i<24; i++) {
+            const t = i/24; const a = t*Math.PI*2;
+            const oR = coreRadius*(2.0+(i%3)*0.18);
+            const cols = [0xfffde7,0xffd700,0xffab40,0xffe082];
+            const dpTex = makeGlowSprite(cols[i%4], 64);
+            const dpMat = new THREE.SpriteMaterial({ map:dpTex, blending:THREE.AdditiveBlending, transparent:true, opacity:0.92, depthWrite:false });
+            const dp = new THREE.Sprite(dpMat);
+            dp.position.set(Math.cos(a)*oR, Math.sin(a)*oR*0.32, Math.sin(a)*oR*0.55);
+            dp.scale.setScalar(0.3+(i%3)*0.08);
+            dp.userData = { genOrbit:true, orbitAngle:a, orbitR:oR, twinkleSpeed:1.2+Math.random()*2, baseOp:0.92 };
+            systemGroup.add(dp); nebulaParticles.push(dp);
+        }
+
+        // 7. Wide outer warm halo — tints whole scene gold
+        const gHaloTex = makeGlowSprite(0xffcc44, 512);
+        const gHaloSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map:gHaloTex, blending:THREE.AdditiveBlending, transparent:true, opacity:0.30, depthWrite:false }));
+        gHaloSpr.scale.setScalar(coreRadius*8.0);
+        systemGroup.add(gHaloSpr); nebulaParticles.push(gHaloSpr);
+
+        // 8. Boost all existing particles — Genesis blesses the whole scene
+        nebulaParticles.forEach(p => { if (p.material && !p.userData.genOrbit) p.material.opacity = Math.min((p.material.opacity||0)+0.30,1.0); });
+        if (fieldParticles) { fieldParticles.material.size *= 1.5; fieldParticles.material.color = new THREE.Color(0xffd700); }
+    }
+
+        // ---- ECUMENOPOLIS CIVILIZATION ENHANCEMENTS (very rare, level 6) ----
+    if (civLvl === 6) {
+        console.log('🏙️ ECUMENOPOLIS detected! Adding MAJOR visual upgrades.');
+
+        // 1. Huge, bright, pulsing RED ring (changed from golden to bright red)
+        const bigRingGeo = new THREE.TorusGeometry(coreRadius * 1.35, 0.12, 64, 200);
+        const bigRingMat = new THREE.MeshBasicMaterial({ color: 0xff3333, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending });
+        const bigRing = new THREE.Mesh(bigRingGeo, bigRingMat);
+        bigRing.rotation.x = Math.PI / 2.2;
+        systemGroup.add(bigRing);
+        cageWires.push(bigRing);
+
+        // 2. City light particles – larger, brighter, twinkling
+        const cityLightCount = 60;
+        for (let i = 0; i < cityLightCount; i++) {
+            const color = 0xffcc88;
+            const tex = makeGlowSprite(color, 48);
+            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9 + Math.random() * 0.1, depthWrite: false });
+            const sprite = new THREE.Sprite(mat);
+            const r = coreRadius * (0.2 + Math.random() * 0.7);
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            sprite.position.set(
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta) * 0.6,
+                r * Math.cos(phi)
+            );
+            sprite.scale.setScalar(0.2 + Math.random() * 0.15);
+            sprite.userData = { twinkleSpeed: 0.5 + Math.random() * 2, baseScale: sprite.scale.x };
+            systemGroup.add(sprite);
+            nebulaParticles.push(sprite);
+        }
+
+        // 3. Extra floating urban glow sprites (orbiting torus)
+        const urbanGlowCount = 30;
+        for (let i = 0; i < urbanGlowCount; i++) {
+            const color = 0xffaa88;
+            const tex = makeGlowSprite(color, 32);
+            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8, depthWrite: false });
+            const sprite = new THREE.Sprite(mat);
+            const angle = (i / urbanGlowCount) * Math.PI * 2;
+            const radius = coreRadius * 1.5;
+            sprite.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.4, Math.sin(angle) * radius * 0.3);
+            sprite.scale.setScalar(0.2);
+            systemGroup.add(sprite);
+            nebulaParticles.push(sprite);
+        }
+
+        // 4. Large central glow (if no economic orb exists, create one; otherwise boost existing)
+        if (!centralOrb) {
+            const coreGlowTex = makeGlowSprite(0xffcc88, 256);
+            const coreGlowMat = new THREE.SpriteMaterial({ map: coreGlowTex, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.85, depthWrite: false });
+            const coreGlow = new THREE.Sprite(coreGlowMat);
+            coreGlow.scale.setScalar(coreRadius * 1.3);
+            coreGlow.position.set(0, 0, 0);
+            systemGroup.add(coreGlow);
+            nebulaParticles.push(coreGlow);
+        } else {
+            centralOrb.material.opacity = Math.min(centralOrb.material.opacity + 0.2, 1.0);
+            centralOrb.scale.setScalar(centralOrb.scale.x * 1.1);
+        }
+
+        // 5. Opacity boost for all existing particles (very strong)
+        nebulaParticles.forEach(p => {
+            if (p.material) p.material.opacity = Math.min(p.material.opacity + 0.25, 1.0);
+        });
+        if (fieldParticles) fieldParticles.material.size *= 1.3;
+
+        // 6. Add a ring of small rotating "satellites" (dots)
+        const satelliteCount = 24;
+        const satRadius = coreRadius * 1.65;
+        for (let i = 0; i < satelliteCount; i++) {
+            const satColor = 0xffdd99;
+            const tex = makeGlowSprite(satColor, 24);
+            const mat = new THREE.SpriteMaterial({ map: tex, blending: THREE.AdditiveBlending, transparent: true, opacity: 1.0, depthWrite: false });
+            const sat = new THREE.Sprite(mat);
+            const angle = (i / satelliteCount) * Math.PI * 2;
+            sat.position.set(Math.cos(angle) * satRadius, Math.sin(angle) * satRadius * 0.5, Math.sin(angle) * satRadius * 0.4);
+            sat.scale.setScalar(0.18);
+            systemGroup.add(sat);
+            nebulaParticles.push(sat);
+        }
+    }
+
+    // ─── RESOURCE DEPOSIT VISUAL ───
+    // Every star system has a mineral deposit ring. Rarity determines brightness.
+    const resColor = RESOURCE_COLORS[traits.resource] || 0x8B7D6B;
+    const resOpacity = {
+        'Stone': 0.12, 'Iron': 0.15, 'Gold': 0.35, 'Crystal': 0.55, 'Void Matter': 0.75
+    }[traits.resource] || 0.12;
+    const resRingRadius = coreRadius * 1.75;
+    const resRingGeo = new THREE.TorusGeometry(resRingRadius, 0.025, 8, 160);
+    const resRingMat = new THREE.MeshBasicMaterial({
+        color: resColor, transparent: true, opacity: resOpacity,
+        blending: THREE.AdditiveBlending, depthWrite: false
+    });
+    const resRing = new THREE.Mesh(resRingGeo, resRingMat);
+    resRing.rotation.x = Math.PI / 2.1;
+    resRing.rotation.z = 0.35;
+    systemGroup.add(resRing);
+    cageWires.push(resRing);
+
+    // Resource deposit particles — clustered along the ring
+    const resParticleCount = { 'Stone': 6, 'Iron': 8, 'Gold': 14, 'Crystal': 22, 'Void Matter': 32 }[traits.resource] || 6;
+    const resRng = createSeededRandom(traits.merkleRoot);
+    for (let i = 0; i < resParticleCount; i++) {
+        const tex = makeGlowSprite(resColor, 48);
+        const mat = new THREE.SpriteMaterial({
+            map: tex, blending: THREE.AdditiveBlending, transparent: true,
+            opacity: resOpacity * 1.3, depthWrite: false
+        });
+        const sprite = new THREE.Sprite(mat);
+        const angle = resRng() * Math.PI * 2;
+        const r = resRingRadius + (resRng() - 0.5) * coreRadius * 0.25;
+        sprite.position.set(
+            Math.cos(angle) * r,
+            (resRng() - 0.5) * coreRadius * 0.15,
+            Math.sin(angle) * r
+        );
+        const sz = 0.12 + resRng() * 0.18;
+        sprite.scale.setScalar(sz);
+        systemGroup.add(sprite);
+        nebulaParticles.push(sprite);
+    }
+
+    // ─── STANDOUT VISUALS FOR RARE RESOURCES ───
+    if (traits.resource === 'Crystal') {
+        // 1. Rotating diamond octahedron at center
+        const crystalGeo = new THREE.OctahedronGeometry(coreRadius * 0.45, 0);
+        const crystalMat = new THREE.MeshBasicMaterial({
+            color: 0x00e5ff, transparent: true, opacity: 0.35,
+            blending: THREE.AdditiveBlending, depthWrite: false, wireframe: true
+        });
+        const crystal = new THREE.Mesh(crystalGeo, crystalMat);
+        crystal.userData = { spinX: 0.008, spinY: 0.012 };
+        systemGroup.add(crystal);
+        cageWires.push(crystal);
+
+        // 2. Inner prismatic ring (counter-rotating)
+        const prismRingGeo = new THREE.TorusGeometry(coreRadius * 0.85, 0.02, 8, 100);
+        const prismRingMat = new THREE.MeshBasicMaterial({
+            color: 0xffffff, transparent: true, opacity: 0.25,
+            blending: THREE.AdditiveBlending, depthWrite: false
+        });
+        const prismRing = new THREE.Mesh(prismRingGeo, prismRingMat);
+        prismRing.rotation.x = Math.PI / 2.5;
+        prismRing.userData = { spinZ: -0.005 };
+        systemGroup.add(prismRing);
+        cageWires.push(prismRing);
+
+        // 3. Sparkle particles — bright white flashes
+        for (let i = 0; i < 18; i++) {
+            const tex = makeGlowSprite(0xffffff, 32);
+            const mat = new THREE.SpriteMaterial({
+                map: tex, blending: THREE.AdditiveBlending, transparent: true,
+                opacity: 0.6 + resRng() * 0.4, depthWrite: false
+            });
+            const sprite = new THREE.Sprite(mat);
+            const r = coreRadius * (0.3 + resRng() * 0.7);
+            const t = resRng() * Math.PI * 2;
+            const p = Math.acos(2 * resRng() - 1);
+            sprite.position.set(
+                r * Math.sin(p) * Math.cos(t),
+                r * Math.sin(p) * Math.sin(t) * 0.5,
+                r * Math.cos(p)
+            );
+            sprite.scale.setScalar(0.15 + resRng() * 0.25);
+            sprite.userData = { twinkleSpeed: 2 + resRng() * 4, baseScale: sprite.scale.x };
+            systemGroup.add(sprite);
+            nebulaParticles.push(sprite);
+        }
+    }
+
+    if (traits.resource === 'Void Matter') {
+        // 1. Dark void sphere (black hole core)
+        const voidGeo = new THREE.SphereGeometry(coreRadius * 0.35, 32, 32);
+        const voidMat = new THREE.MeshBasicMaterial({
+            color: 0x000000, transparent: true, opacity: 0.85,
+            blending: THREE.NormalBlending, depthWrite: false
+        });
+        const voidSphere = new THREE.Mesh(voidGeo, voidMat);
+        systemGroup.add(voidSphere);
+        cageWires.push(voidSphere);  // animate via cageWires rotation hooks
+
+        // 2. Accretion disk — dark purple torus
+        const accretionGeo = new THREE.TorusGeometry(coreRadius * 0.65, 0.06, 24, 160);
+        const accretionMat = new THREE.MeshBasicMaterial({
+            color: 0x4B0082, transparent: true, opacity: 0.65,
+            blending: THREE.AdditiveBlending, depthWrite: false
+        });
+        const accretion = new THREE.Mesh(accretionGeo, accretionMat);
+        accretion.rotation.x = Math.PI / 2.3;
+        accretion.userData = { spinZ: 0.015 };
+        systemGroup.add(accretion);
+        cageWires.push(accretion);
+
+        // 3. Spiral arm particles — sucked inward
+        for (let i = 0; i < 40; i++) {
+            const t = i / 40;
+            const angle = t * Math.PI * 6;
+            const radius = coreRadius * (0.5 + t * 1.6);
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            const y = Math.sin(angle * 3) * radius * 0.3;
+            const tex = makeGlowSprite(0x9c4dff, 32);
+            const mat = new THREE.SpriteMaterial({
+                map: tex, blending: THREE.AdditiveBlending, transparent: true,
+                opacity: 0.5 + resRng() * 0.5, depthWrite: false
+            });
+            const particle = new THREE.Sprite(mat);
+            particle.position.set(x, y, z);
+            particle.scale.setScalar(0.2 + t * 0.15);
+            systemGroup.add(particle);
+            nebulaParticles.push(particle);
+        }
+
+        // 4. Outer dark halo ring
+        const haloGeo = new THREE.TorusGeometry(coreRadius * 1.2, 0.04, 16, 120);
+        const haloMat = new THREE.MeshBasicMaterial({
+            color: 0x2a0055, transparent: true, opacity: 0.3,
+            blending: THREE.AdditiveBlending, depthWrite: false
+        });
+        const halo = new THREE.Mesh(haloGeo, haloMat);
+        halo.rotation.x = Math.PI / 1.9;
+        halo.rotation.z = 0.7;
+        systemGroup.add(halo);
+        cageWires.push(halo);
+    }
+
+    updateLegend(traits);
+    setTimeout(() => overlay.classList.add('hidden'), 50);
+}
+
+function updateLegend(traits) {
+    const pal = getBiomePalette(traits.biome);
+    const coreHex = '#'+pal.core[0].toString(16).padStart(6,'0');
+    const resColor = '#'+RESOURCE_COLORS[traits.resource].toString(16).padStart(6,'0');
+    const legend = document.getElementById('legendBox');
+    legend.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:${traits.worldClass.color}"></div> ${traits.worldClass.spectral}-class</div>
+        <div class="legend-item"><div class="legend-dot" style="background:${coreHex}"></div> ${traits.biome}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:${resColor}"></div> ${traits.resource}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#aaa"></div> ${traits.civilization.split('/')[0]}</div>`;
+}
+function renderTraits(traits) {
+    const feeBTC = (traits.totalFee / 1e8).toFixed(traits.totalFee < 1e6 ? 6 : 4);
+    const civIdx = traits.civilizationLevel;
+
+    // Economy tier classes
+    const isSingularity = traits.economy === 'Singularity';
+    const isOmega       = traits.economy === 'Omega';
+    const ecoCardClass  = isSingularity ? 'economy-tier-singularity' : isOmega ? 'economy-tier-omega' : '';
+    const ecoValClass   = isSingularity ? 'economy-singularity-text' : isOmega ? 'economy-omega-text' : '';
+    const ecoTierLabel  = isSingularity
+        ? `<div class="economy-tier-label singularity-label">◈ Singularity Economy</div>`
+        : isOmega
+        ? `<div class="economy-tier-label omega-label">Ω Omega Economy</div>`
+        : '';
+
+    // Stellar class tier classes
+    const wc = traits.worldClass.name;
+    const starCardClass = (wc === 'Mythic' || wc === 'Transcendent') ? `tier-${wc.toLowerCase()}` : '';
+
+    const resCardClass = (traits.resource === 'Crystal') ? 'resource-crystal' : (traits.resource === 'Void Matter') ? 'resource-void' : '';
+    const resBadge = (traits.resource === 'Crystal') ? '<div class="resource-badge rb-crystal">💎 RARE CRYSTAL</div>' : (traits.resource === 'Void Matter') ? '<div class="resource-badge rb-void">◉ EPIC VOID MATTER</div>' : '';
+    document.getElementById('coreTraits').innerHTML = `
+        <div class="trait-card"><div class="trait-label">Surface Biome</div><div class="trait-value">${BIOME_EMOJIS[traits.biome]} ${traits.biome}</div><div class="trait-detail">hash[18:20] (0x${traits.biomeByte.toString(16).padStart(2,'0')}) % 5 = ${traits.biomeIndex}</div></div>
+        <div class="trait-card"><div class="trait-label">Atmosphere</div><div class="trait-value">${traits.weather}</div><div class="trait-detail">hash[2:4] (0x${traits.weatherByte.toString(16).padStart(2,'0')}) % 4 = ${traits.weatherIndex}</div></div>
+        <div class="trait-card"><div class="trait-label">Civilization</div><div class="trait-value">${traits.civilization}</div><div class="trait-detail">tx_count ${traits.transactionCount.toLocaleString()} → level ${civIdx}</div></div>
+        <div class="trait-card ${ecoCardClass}"><div class="trait-label">Economy</div><div class="trait-value ${ecoValClass}">${traits.economy}</div>${ecoTierLabel}<div class="trait-detail">${traits.totalFee.toLocaleString()} sats (~${feeBTC} BTC)</div></div>
+        <div class="trait-card ${resCardClass}"><div class="trait-label">Resource</div><div class="trait-value">${traits.resource}</div>${resBadge}<div class="trait-detail">merkle_root[0:2] = 0x${traits.resourceByte.toString(16).padStart(2,'0').toUpperCase()} · ${traits.resourceTier}</div></div>
+        <div class="trait-card"><div class="trait-label">Historical Era</div><div class="trait-value">${traits.era.name}</div><div class="trait-detail">blocks ${traits.era.blocks}</div></div>`;
+    document.getElementById('rarityTraits').innerHTML = `
+        <div class="trait-card ${starCardClass}"><div class="trait-label">Stellar Class</div><div class="trait-value rarity-${wc}">${traits.worldClass.spectral}-type ${wc}</div><div class="trait-detail">${traits.worldClass.zeros} leading zeros in hash</div></div>
+        <div class="trait-card"><div class="trait-label">Temporal Modifier</div><div class="trait-value">${traits.timeModifier.modifier}</div><div class="trait-detail">UTC ${String(traits.timeModifier.hour).padStart(2,'0')}:00, ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][traits.timeModifier.day]}</div></div>`;
+    // Genesis Signal = full-width premium card; all others = standard pill
+    document.getElementById('specialFlags').innerHTML = traits.flags.map(f => {
+        if (f.genesis) {
+            if (!f.active) return `<div class="flag flag-genesis inactive" title="Pattern 20090103 not found in this block's tx hashes"><span>${f.icon}</span>${f.name}</div>`;
+            return `<div class="flag flag-genesis active">
+  <div class="genesis-header"><span class="genesis-icon">${f.icon}</span>Genesis Signal</div>
+  <div class="genesis-badge">&#9651;&nbsp;Satoshi Protocol&nbsp;&nbsp;·&nbsp;&nbsp;Ultra-Rare</div>
+  <div class="genesis-pattern">2 0 0 9 0 1 0 3</div>
+  <div class="genesis-desc">Pattern found in transaction hashes<br><strong>January 3, 2009</strong> — Bitcoin's Birthday<br>The day Satoshi mined the Genesis Block</div>
+  <div class="genesis-rarity">~23 confirmed &nbsp;/&nbsp; ~950,000 blocks &nbsp;·&nbsp; top 0.003%</div>
+</div>`;
+        }
+        return `<div class="flag ${f.active?'active':'inactive'}" title="${f.desc||f.name}"><span>${f.icon}</span>${f.name}${f.desc?` <small>${f.desc}</small>`:''}</div>`;
+    }).join('');
+    document.getElementById('worldName').textContent = `${traits.height}.bitcoin`;
+    document.getElementById('parentNs').textContent = `${traits.height}.bitcoin`;
+    document.getElementById('worldEmoji').textContent = BIOME_EMOJIS[traits.biome] || '⭐';
+    const badge = document.getElementById('worldClassBadge');
+    badge.textContent = traits.worldClass.name;
+    badge.className = `rarity-badge rarity-${traits.worldClass.name}`;
+    const h = traits.hash;
+    const hashHtml = `<span style="color:var(--text-dim)" title="PoW prefix">${h.slice(0,2)}</span><span style="color:#9c4dff" title="Whitepaper §3.2 – weather">${h.slice(2,4)}</span><span style="color:var(--text-dim)">${h.slice(4,18)}</span><span style="color:#f7931a" title="Whitepaper §3.1 – biome">${h.slice(18,20)}</span><span style="color:var(--text-dim)">${h.slice(20)}</span>`;
+    const el = document.getElementById('hashPreview');
+    if(el) el.innerHTML = hashHtml;
+    document.getElementById('verifyLink').href = `https://ordinals.com/r/blockinfo/${traits.height}`;
+    document.getElementById('verifyLink').textContent = `ordinals.com/r/blockinfo/${traits.height}`;
+}
+
+let currentHeight = null;
+let threeInitialized = false;
+
+async function exploreWorld(heightOverride) {
+    const height = heightOverride ?? parseInt(document.getElementById('blockInput').value);
+    if (isNaN(height) || height < 0) {
+        statusDiv.innerHTML = '<div class="error">Please enter a valid block height (≥ 0).</div>';
+        return;
+    }
+    document.getElementById('blockInput').value = height;
+    currentHeight = height;
+    document.getElementById('prevBtn').disabled = height <= 0;
+    document.getElementById('nextBtn').disabled = false;
+    document.getElementById('exploreBtn').disabled = true;
+    statusDiv.innerHTML = '<div class="loading">⛓️ Fetching block data…</div>';
+    document.getElementById('resultArea').style.display = 'grid';
+    if (!threeInitialized) { await new Promise(r => requestAnimationFrame(r)); initThree(); threeInitialized = true; }
+    overlay.classList.remove('hidden');
+    try {
+        let data; const cacheKey = `block_${height}`;
+        if (blockCache.has(cacheKey)) { data = blockCache.get(cacheKey); }
+        else { const resp = await fetch(`https://ordinals.com/r/blockinfo/${height}`); if (!resp.ok) throw new Error(`HTTP ${resp.status} — Block may not exist`); data = await resp.json(); if (blockCache.size >= MAX_CACHE_SIZE) blockCache.delete(blockCache.keys().next().value); blockCache.set(cacheKey, data); }
+        const biomeData = computeBiome(data.hash);
+        const weatherData = computeWeather(data.hash);
+        const resourceData = computeResource(data.merkle_root);
+        const worldClassData = computeWorldClass(data.hash);
+        const traits = {
+            height: data.height, hash: data.hash, merkleRoot: data.merkle_root,
+            transactionCount: data.transaction_count, totalFee: data.total_fee,
+            subsidy: data.subsidy, timestamp: data.timestamp,
+            biome: biomeData.name, biomeIndex: biomeData.index, biomeByte: biomeData.byte,
+            weather: weatherData.name, weatherIndex: weatherData.index, weatherByte: weatherData.byte,
+            civilization: computeCivilization(data.transaction_count),
+            civilizationLevel: computeCivilizationIndex(data.transaction_count),
+            economy: computeEconomy(data.total_fee),
+            worldClass: worldClassData,
+            resource: resourceData.name, resourceByte: resourceData.byte, resourceTier: resourceData.tier,
+            era: computeEra(data.subsidy),
+            timeModifier: computeTimeModifiers(data.timestamp),
+            flags: checkSpecialFlags(data.height, data.hash, data.timestamp),
+        };
+        renderTraits(traits);
+        buildStarSystem(traits);
+        statusDiv.innerHTML = '';
+        window.history.replaceState({}, '', `?block=${height}`);
+    } catch (err) { console.error(err); overlay.classList.add('hidden'); statusDiv.innerHTML = `<div class="error">⚠️ Failed: ${err.message}</div>`; document.getElementById('resultArea').style.display = 'none'; }
+    finally { document.getElementById('exploreBtn').disabled = false; }
+}
+function navigateBlock(delta) { if (currentHeight === null) currentHeight = parseInt(document.getElementById('blockInput').value) || 840000; exploreWorld(Math.max(0, currentHeight + delta)); }
+function exploreRandom() { const ranges = [[0,1000],[210000,210010],[420000,420010],[630000,630010],[840000,840010],[100000,200000],[500000,600000],[700000,850000]]; const r = ranges[Math.floor(Math.random()*ranges.length)]; const h = Math.floor(Math.random()*(r[1]-r[0]+1)) + r[0]; document.getElementById('blockInput').value = h; exploreWorld(h); }
+function shareWorld() { const h = currentHeight || 840000; const url = `${window.location.origin}${window.location.pathname}?block=${h}`; navigator.clipboard?.writeText(url).then(()=>{ const t=document.getElementById('toast'); t.classList.add('visible'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('visible'),2000); }); }
+document.getElementById('blockInput').addEventListener('keypress', e=>{ if(e.key==='Enter') exploreWorld(); });
+document.addEventListener('keydown', e=>{ if(e.target.tagName==='INPUT') return; if(e.key==='ArrowLeft') navigateBlock(-1); if(e.key==='ArrowRight') navigateBlock(1); if(e.key==='r'||e.key==='R') exploreRandom(); });
+window.addEventListener('DOMContentLoaded', ()=>{ let initial = 840000; const params = new URLSearchParams(window.location.search); const b = parseInt(params.get('block')); if (!isNaN(b) && b >= 0) initial = b; document.getElementById('blockInput').value = initial; exploreWorld(initial); });
+function setTheme(t) {
+    document.documentElement.classList.toggle('theme-light', t === 'light');
+    document.getElementById('themeDark').classList.toggle('active',  t === 'dark');
+    document.getElementById('themeLight').classList.toggle('active', t === 'light');
+    localStorage.setItem('buni-theme', t);
+}
+// Restore saved theme
+(function(){ const saved = localStorage.getItem('buni-theme'); if(saved) setTheme(saved); })();
+window.setTheme = setTheme;
+window.navigateBlock = navigateBlock;
+window.exploreWorld = exploreWorld;
+window.exploreRandom = exploreRandom;
+window.shareWorld = shareWorld;
+</script>
+</body>
+</html>
