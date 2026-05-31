@@ -233,6 +233,25 @@
 
         /* ─── CONTROLS (now in header right) ─────────── */
         .controls-wrap { display: none; } /* hidden — controls moved into header */
+        .paper-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Space Mono', monospace; font-size: 0.58rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-muted); text-decoration: none;
+            padding: 6px 14px; border: 1px solid var(--border);
+            border-radius: 8px; white-space: nowrap; flex-shrink: 0;
+            transition: all 0.2s; background: rgba(255,255,255,0.02);
+        }
+        .paper-link:hover {
+            color: var(--btc-orange); border-color: rgba(247,147,26,0.45);
+            background: rgba(247,147,26,0.07);
+            box-shadow: 0 0 14px rgba(247,147,26,0.12);
+        }
+        .paper-link .paper-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--btc-orange); opacity: 0.6;
+            box-shadow: 0 0 6px var(--btc-orange);
+        }
         .controls {
             display: flex;
             gap: 7px;
@@ -1059,6 +1078,7 @@
             <h1><span style="display:inline-block;width:0.55em;height:0.55em;background:var(--btc-orange);border-radius:3px;margin-right:10px;vertical-align:middle;box-shadow:0 0 12px var(--btc-glow);flex-shrink:0;"></span>Bitcoin Universe</h1>
             <p class="subtitle">// deterministic star systems from block consensus data</p>
         </div>
+        <a href="paper.html" class="paper-link" title="Technical Whitepaper"><span class="paper-dot"></span>Paper</a>
         <div class="controls">
             <button class="nav-btn" id="prevBtn" onclick="navigateBlock(-1)" title="Previous block">&#9664; Prev</button>
             <div class="input-group">
