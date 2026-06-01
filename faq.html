@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Universe — FAQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --btc:#f7931a;--btc-amber:#ffab40;--btc-glow:rgba(247,147,26,0.4);
+  --bg:#020209;--bg-deep:#04040f;--bg-panel:rgba(8,8,22,0.92);
+  --bg-card:rgba(14,14,34,0.94);--border:rgba(38,38,72,0.9);
+  --border-lit:rgba(58,58,98,1);--text:#eaeaff;--muted:#7272a0;--dim:#40406a;
+  --cyan:#00e5ff;--purple:#9c4dff;--green:#69f0ae;--gold:#ffd700;
+  --r-common:#bdbdbd;--r-uncommon:#69f0ae;--r-rare:#40c4ff;
+  --r-epic:#e040fb;--r-legendary:#ffab40;--r-mythic:#ff1744;--r-transcendent:#fff;
+  --sidebar:260px;--content:800px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.94rem;line-height:1.75;min-height:100vh;overflow-x:hidden}
+
+/* ── STARFIELD ── */
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── LAYOUT ── */
+.page-wrap{position:relative;z-index:1;display:flex;min-height:calc(100vh - 52px)}
+
+/* ── SIDEBAR NAV ── */
+.toc-nav{
+  position:sticky;top:52px;height:calc(100vh - 52px);width:var(--sidebar);flex-shrink:0;
+  padding:32px 0 32px 28px;overflow-y:auto;
+  border-right:1px solid rgba(247,147,26,0.12);
+  background:linear-gradient(180deg,rgba(4,4,15,0.97) 0%,rgba(2,2,9,0.97) 100%);
+  backdrop-filter:blur(12px);
+}
+.toc-nav::-webkit-scrollbar{width:3px}
+.toc-nav::-webkit-scrollbar-thumb{background:rgba(247,147,26,0.3);border-radius:2px}
+.toc-brand{margin-bottom:28px}
+.toc-brand-title{
+  font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:900;
+  letter-spacing:2.5px;text-transform:uppercase;
+  background:linear-gradient(135deg,#fff 0%,var(--btc-amber) 50%,var(--btc) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 10px rgba(247,147,26,0.4));line-height:1.3;
+}
+.toc-brand-sub{font-family:'Space Mono',monospace;font-size:0.48rem;color:var(--dim);letter-spacing:2px;margin-top:4px}
+.toc-back{
+  display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+  font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;
+  color:var(--muted);text-decoration:none;text-transform:uppercase;
+  padding:5px 10px;border:1px solid var(--border);border-radius:6px;
+  transition:all 0.2s;
+}
+.toc-back:hover{color:var(--btc);border-color:rgba(247,147,26,0.4);background:rgba(247,147,26,0.06)}
+
+/* ── PAGE NAV LINKS ── */
+.page-nav{display:flex;flex-direction:column;gap:4px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.page-nav-link{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:1.5px;
+  color:var(--muted);text-decoration:none;text-transform:uppercase;
+  padding:6px 10px;border:1px solid transparent;border-radius:6px;
+  transition:all 0.2s;
+}
+.page-nav-link:hover{color:var(--btc);border-color:rgba(247,147,26,0.3);background:rgba(247,147,26,0.05)}
+.page-nav-link.active{color:var(--btc);border-color:rgba(247,147,26,0.4);background:rgba(247,147,26,0.08)}
+.page-nav-link .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.7;flex-shrink:0}
+
+.toc-section-label{font-family:'Space Mono',monospace;font-size:0.44rem;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin:22px 0 8px}
+.toc-link{
+  display:block;font-family:'Space Mono',monospace;font-size:0.56rem;
+  letter-spacing:0.5px;color:var(--muted);text-decoration:none;
+  padding:5px 0 5px 10px;border-left:2px solid transparent;
+  transition:all 0.18s;line-height:1.4;margin-bottom:2px;
+}
+.toc-link:hover,.toc-link.active{color:var(--btc);border-left-color:var(--btc);background:rgba(247,147,26,0.05)}
+.toc-version{
+  margin-top:auto;padding-top:20px;font-family:'Space Mono',monospace;
+  font-size:0.46rem;color:var(--dim);letter-spacing:1px;border-top:1px solid var(--border);margin-right:28px;
+}
+
+/* ── MAIN CONTENT ── */
+.content{flex:1;max-width:var(--content);margin:0 auto;padding:64px 48px 120px}
+
+/* ── HERO ── */
+.hero{
+  text-align:center;padding:72px 40px 56px;margin-bottom:56px;position:relative;
+  border-bottom:1px solid rgba(247,147,26,0.15);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(247,147,26,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:3px;text-transform:uppercase;
+  padding:6px 18px;border-radius:20px;margin-bottom:24px;
+  background:rgba(247,147,26,0.08);border:1px solid rgba(247,147,26,0.3);
+  color:var(--btc);text-shadow:0 0 10px rgba(247,147,26,0.5);
+  animation:heroBadgePulse 3s ease-in-out infinite;
+}
+@keyframes heroBadgePulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 20px rgba(247,147,26,0.2)}}
+.hero-badge .dot{width:5px;height:5px;background:var(--btc);border-radius:50%;animation:pulseDot 1.8s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.6)}}
+.hero-title{
+  font-family:'Orbitron',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;
+  letter-spacing:4px;line-height:1.1;margin-bottom:16px;
+  background:linear-gradient(160deg,#ffffff 0%,#ffe4b0 30%,var(--btc) 60%,#c4620a 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 40px rgba(247,147,26,0.4));
+}
+.hero-sub{
+  font-family:'Orbitron',sans-serif;font-size:clamp(0.6rem,1.2vw,0.8rem);
+  letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;
+}
+
+/* ── FAQ ITEMS ── */
+.faq-section{margin-bottom:60px;scroll-margin-top:32px}
+.section-label{
+  font-family:'Space Mono',monospace;font-size:0.5rem;letter-spacing:4px;
+  text-transform:uppercase;color:var(--btc);margin-bottom:8px;opacity:0.7;
+}
+h2{
+  font-family:'Orbitron',sans-serif;font-size:clamp(1.0rem,2vw,1.4rem);font-weight:900;
+  letter-spacing:2px;margin-bottom:20px;line-height:1.2;
+  background:linear-gradient(135deg,#fff 0%,var(--btc-amber) 60%,var(--btc) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.2);position:relative;
+}
+h2::after{
+  content:'';position:absolute;bottom:-1px;left:0;width:60px;height:2px;
+  background:var(--btc);box-shadow:0 0 8px var(--btc-glow);border-radius:1px;
+}
+
+/* ── FAQ ACCORDION ── */
+.faq-item{
+  border:1px solid var(--border);border-radius:12px;
+  margin-bottom:10px;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.faq-item:hover{border-color:rgba(247,147,26,0.25)}
+.faq-item.open{border-color:rgba(247,147,26,0.4);box-shadow:0 0 20px rgba(247,147,26,0.06)}
+.faq-question{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 22px;cursor:pointer;user-select:none;
+  background:var(--bg-card);
+  transition:background 0.2s;
+}
+.faq-question:hover{background:rgba(18,18,42,0.98)}
+.faq-item.open .faq-question{background:rgba(20,14,36,0.99)}
+.faq-q-text{
+  font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;
+  letter-spacing:0.8px;color:var(--text);line-height:1.4;
+}
+.faq-item.open .faq-q-text{color:var(--btc-amber)}
+.faq-chevron{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--border-lit);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;color:var(--muted);
+  transition:all 0.25s;background:rgba(255,255,255,0.02);
+}
+.faq-item.open .faq-chevron{
+  background:rgba(247,147,26,0.12);border-color:rgba(247,147,26,0.4);
+  color:var(--btc);transform:rotate(180deg);
+}
+.faq-answer{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+  background:rgba(8,8,22,0.85);
+}
+.faq-item.open .faq-answer{max-height:1000px}
+.faq-answer-inner{
+  padding:20px 22px 22px;
+  font-size:0.88rem;line-height:1.8;color:rgba(234,234,255,0.85);
+  border-top:1px solid rgba(38,38,72,0.7);
+}
+.faq-answer-inner p{margin-bottom:10px}
+.faq-answer-inner p:last-child{margin-bottom:0}
+.faq-answer-inner code{
+  font-family:'Space Mono',monospace;font-size:0.72rem;
+  background:rgba(0,0,0,0.5);border:1px solid rgba(79,195,247,0.2);
+  color:var(--cyan);padding:1px 6px;border-radius:4px;
+}
+.faq-answer-inner strong{color:var(--text)}
+.faq-answer-inner a{color:var(--btc);text-decoration:none;border-bottom:1px solid rgba(247,147,26,0.3)}
+.faq-answer-inner a:hover{border-bottom-color:var(--btc)}
+.faq-answer-inner ul{padding-left:20px;margin:8px 0}
+.faq-answer-inner ul li{margin-bottom:5px}
+
+/* ── PILL BADGES (for rarity mentions) ── */
+.pill{
+  display:inline-flex;align-items:center;
+  font-family:'Space Mono',monospace;font-size:0.58rem;font-weight:700;
+  letter-spacing:1px;padding:2px 8px;border-radius:10px;border:1px solid;
+}
+.pill-common   {color:var(--r-common);    border-color:rgba(189,189,189,0.3);background:rgba(189,189,189,0.06)}
+.pill-uncommon {color:var(--r-uncommon);  border-color:rgba(105,240,174,0.3);background:rgba(105,240,174,0.06)}
+.pill-rare     {color:var(--r-rare);      border-color:rgba(64,196,255,0.3); background:rgba(64,196,255,0.06)}
+.pill-epic     {color:var(--r-epic);      border-color:rgba(224,64,251,0.3); background:rgba(224,64,251,0.06)}
+.pill-legendary{color:var(--r-legendary); border-color:rgba(255,171,64,0.3); background:rgba(255,171,64,0.06)}
+.pill-mythic   {color:var(--r-mythic);    border-color:rgba(255,23,68,0.3);  background:rgba(255,23,68,0.06)}
+
+/* ── CALLOUT ── */
+.callout{
+  border-radius:12px;padding:16px 20px;margin:14px 0;
+  font-size:0.84rem;line-height:1.65;position:relative;
+}
+.callout-note{background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.2);border-left:3px solid var(--cyan)}
+.callout-warn{background:rgba(255,171,64,0.06);border:1px solid rgba(255,171,64,0.25);border-left:3px solid var(--btc-amber)}
+.callout-title{
+  font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:900;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--btc-amber);
+}
+.callout p{color:var(--text);margin:4px 0 0}
+
+/* ── SEARCH BAR ── */
+.faq-search-wrap{margin-bottom:40px;position:relative}
+.faq-search{
+  width:100%;padding:14px 20px 14px 48px;
+  background:var(--bg-card);border:1px solid var(--border-lit);
+  border-radius:12px;color:var(--text);
+  font-family:'Space Mono',monospace;font-size:0.75rem;letter-spacing:0.5px;
+  outline:none;transition:all 0.2s;
+}
+.faq-search:focus{border-color:rgba(247,147,26,0.5);box-shadow:0 0 0 2px rgba(247,147,26,0.10),0 0 20px rgba(247,147,26,0.08)}
+.faq-search::placeholder{color:var(--dim)}
+.faq-search-icon{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:0.9rem;pointer-events:none;
+}
+.faq-count{
+  font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--dim);
+  letter-spacing:1px;text-align:right;margin-top:8px;
+}
+.no-results{
+  text-align:center;padding:48px 24px;color:var(--muted);
+  font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:1px;display:none;
+}
+.no-results .no-results-icon{font-size:2rem;margin-bottom:12px;display:block;opacity:0.4}
+
+/* ── HIGHLIGHT ── */
+mark{background:rgba(247,147,26,0.25);color:var(--btc-amber);border-radius:2px;padding:0 1px}
+
+/* ── THEME TOGGLE (sidebar hidden) ── */
+.theme-toggle-paper{display:none}
+.theme-btn-paper{display:none}
+
+/* ── TOP HEADER BAR ── */
+.top-header{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:0 28px;
+  background:rgba(4,4,15,0.97);
+  border-bottom:1px solid rgba(247,147,26,0.15);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  height:52px;flex-shrink:0;
+}
+html.theme-light .top-header{background:rgba(240,240,250,0.97)}
+.top-header-brand{
+  font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:900;
+  letter-spacing:2px;text-transform:uppercase;white-space:nowrap;
+  background:linear-gradient(135deg,#fff 0%,var(--btc-amber) 50%,var(--btc) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 8px rgba(247,147,26,0.3));
+}
+.top-header-nav{display:flex;align-items:center;gap:6px}
+.top-nav-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Space Mono',monospace;font-size:0.54rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;
+  color:var(--muted);padding:7px 13px;border:1px solid transparent;
+  border-radius:8px;transition:all 0.2s;white-space:nowrap;
+}
+.top-nav-link:hover{color:var(--btc);border-color:rgba(247,147,26,0.35);background:rgba(247,147,26,0.06)}
+.top-nav-link.active{
+  color:#0a0400;
+  background:linear-gradient(135deg,#f7931a 0%,#e07010 100%);
+  border-color:rgba(247,147,26,0.5);
+  box-shadow:0 0 14px rgba(247,147,26,0.35),inset 0 1px 0 rgba(255,220,150,0.25);
+}
+.top-header-right{display:flex;align-items:center;gap:10px}
+.top-theme-toggle{
+  display:flex;align-items:center;
+  background:var(--bg-card);border:1px solid var(--border-lit);
+  border-radius:8px;overflow:hidden;flex-shrink:0;
+}
+.top-theme-btn{
+  font-family:'Space Mono',monospace;font-size:0.5rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;border:none;
+  padding:7px 11px;cursor:pointer;transition:all 0.2s;
+  background:transparent;color:var(--dim);
+}
+.top-theme-btn:hover{color:var(--muted)}
+.top-theme-btn.active{background:linear-gradient(135deg,var(--btc),#e07010);color:#0a0500}
+.top-header-line{
+  position:absolute;bottom:0;left:0;right:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,rgba(247,147,26,0.15) 20%,rgba(247,147,26,0.45) 50%,rgba(247,147,26,0.15) 80%,transparent 100%);
+}
+
+/* ── LIGHT THEME ── */
+html.theme-light{
+  --bg:#eeeef6;--bg-deep:#e4e4ef;--bg-panel:rgba(255,255,255,0.94);
+  --bg-card:rgba(244,244,252,0.98);--border:rgba(195,195,220,0.9);
+  --border-lit:rgba(175,175,210,1);--text:#0e0e22;--muted:#555580;--dim:#8888b5;
+}
+html.theme-light body{background:var(--bg)}
+html.theme-light .toc-nav{background:linear-gradient(180deg,rgba(240,240,252,0.97) 0%,rgba(230,230,248,0.97) 100%)}
+html.theme-light .faq-question{background:rgba(244,244,252,0.98)}
+html.theme-light .faq-item.open .faq-question{background:rgba(234,234,248,1)}
+html.theme-light .faq-answer{background:rgba(250,250,255,0.95)}
+html.theme-light .faq-search{background:rgba(244,244,252,0.98)}
+html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgba(79,195,247,0.25)}
+
+/* ── FOOTER ── */
+.footer{
+  text-align:center;padding:40px 0 20px;margin-top:60px;
+  font-family:'Space Mono',monospace;font-size:0.55rem;letter-spacing:1px;
+  color:var(--dim);border-top:1px solid var(--border);line-height:2;
+}
+.footer a{color:var(--muted);text-decoration:none}
+.footer a:hover{color:var(--btc)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(247,147,26,0.25);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(247,147,26,0.45)}
+</style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+
+<!-- ── TOP HEADER ── -->
+<header class="top-header">
+  <span class="top-header-brand">Bitcoin Universe</span>
+  <nav class="top-header-nav">
+    <a href="index.html" class="top-nav-link">🌌 Home</a>
+    <a href="paper.html" class="top-nav-link">📄 Paper</a>
+    <a href="faq.html"   class="top-nav-link active">❓ FAQ</a>
+  </nav>
+  <div class="top-header-right">
+    <div class="top-theme-toggle">
+      <button class="top-theme-btn" id="tpDark"  onclick="setTheme('dark')">● Dark</button>
+      <button class="top-theme-btn active" id="tpLight" onclick="setTheme('light')">○ Light</button>
+    </div>
+  </div>
+  <div class="top-header-line"></div>
+</header>
+
+<div class="page-wrap">
+<!-- ── SIDEBAR NAV ── -->
+<nav class="toc-nav">
+  <div class="toc-brand">
+    <div class="toc-brand-title">Bitcoin<br>Universe</div>
+    <div class="toc-brand-sub">// FAQ v0.3.0</div>
+  </div>
+
+  <div class="toc-section-label">Categories</div>
+  <a href="#basics" class="toc-link">Basics</a>
+  <a href="#traits" class="toc-link">Traits & Rarity</a>
+  <a href="#rarity" class="toc-link">Stellar Classes</a>
+  <a href="#resources" class="toc-link">Resources</a>
+  <a href="#flags" class="toc-link">Special Flags</a>
+  <a href="#genesis" class="toc-link">Genesis Signal</a>
+  <a href="#namespace" class="toc-link">Namespace</a>
+  <a href="#technical" class="toc-link">Technical</a>
+  <a href="#security" class="toc-link">Security & Trust</a>
+
+  <div class="toc-version">
+    Protocol v0.3.0 · May 2026<br>
+    No indexer required · ordinals.com
+  </div>
+</nav>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="content">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge"><span class="dot"></span> Frequently Asked Questions</div>
+    <h1 class="hero-title">🌌 Bitcoin Universe</h1>
+    <div class="hero-sub">Everything you need to know</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="faq-search-wrap">
+    <span class="faq-search-icon">🔍</span>
+    <input type="text" class="faq-search" id="faqSearch" placeholder="Search questions…" autocomplete="off" spellcheck="false">
+    <div class="faq-count" id="faqCount"></div>
+  </div>
+  <div class="no-results" id="noResults">
+    <span class="no-results-icon">🪐</span>
+    No matching questions found in this universe.
+  </div>
+
+  <!-- ── BASICS ── -->
+  <section class="faq-section" id="basics">
+    <div class="section-label">// 01</div>
+    <h2>The Basics</h2>
+
+    <div class="faq-item" data-tags="what is bitcoin universe">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is Bitcoin Universe?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Bitcoin Universe is a deterministic, on-chain procedural art project that transforms Bitcoin block data into fully rendered 3D star systems. Every Bitcoin block — identified by its height — maps to exactly one unique cosmic world, generated from the block's cryptographic properties.</p>
+          <p>There is no randomness beyond what Bitcoin's proof-of-work already provides. The explorer is purely client-side, requires no wallet, no login, and no backend. It runs in any WebGL-capable browser.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="how does it work generation">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does the world generation work?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>When you enter a block height, the explorer fetches real on-chain data from the <code>ordinals.com/r/blockinfo/{height}</code> endpoint. From that data, a set of deterministic algorithms extract several "cosmic traits" — biome, atmosphere, civilization level, economy tier, stellar class, resource deposit, historical era, and special flags.</p>
+          <p>These traits are then fed into a Three.js 3D renderer that builds a live star system in your browser. The same block height always produces the identical result on any device.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="install setup requirements browser">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Do I need to install anything?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>No. Bitcoin Universe is a zero-install, client-side application. All you need is a modern browser with WebGL support — Chrome, Firefox, Edge, and Safari all work. No wallet, no extension, no backend connection required.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="data source ordinals api endpoint">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Where does the block data come from?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>All block data is fetched live from the public <a href="https://ordinals.com" target="_blank">ordinals.com</a> endpoint:</p>
+          <p><code>GET https://ordinals.com/r/blockinfo/{height}</code></p>
+          <p>This endpoint is part of the Ordinals protocol and carries backward-compatibility guarantees within that protocol. No third-party indexer or custom server is involved. Results are cached client-side (up to 30 blocks, LRU eviction) to minimize redundant network requests.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="free cost price pay">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Is Bitcoin Universe free to use?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Yes, completely. The explorer is free to use. Viewing and generating star systems costs nothing. The only on-chain cost would be if you choose to inscribe a namespace (like <code>840000.bitcoin</code>) — that requires a standard Ordinals inscription transaction, which carries the usual Bitcoin transaction fee.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TRAITS ── -->
+  <section class="faq-section" id="traits">
+    <div class="section-label">// 02</div>
+    <h2>Traits &amp; Rarity</h2>
+
+    <div class="faq-item" data-tags="traits what traits biome weather">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What traits does each block receive?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Each Bitcoin block deterministically generates 9 cosmic traits:</p>
+          <ul>
+            <li><strong>Surface Biome</strong> — derived from <code>hash[18:20]</code> (Ocean, Desert, Forest, Snowfield, Volcano)</li>
+            <li><strong>Atmosphere</strong> — derived from <code>hash[2:4]</code> (Sunny, Rain, Storm, Snow)</li>
+            <li><strong>Civilization Density</strong> — derived from <code>transaction_count</code> (7 levels, Primordial → Ecumenopolis)</li>
+            <li><strong>Economic Development</strong> — derived from <code>total_fee</code> in satoshis (7 tiers, Primordial → Omega)</li>
+            <li><strong>Stellar Class</strong> — derived from leading zeros in <code>hash</code> (7 classes, Common → Transcendent)</li>
+            <li><strong>Resource Deposit</strong> — derived from <code>merkle_root[0:2]</code> (Stone, Iron, Gold, Crystal, Void Matter)</li>
+            <li><strong>Historical Era</strong> — derived from <code>subsidy</code> / halving epoch</li>
+            <li><strong>Temporal Modifier</strong> — derived from <code>timestamp</code> (UTC hour + weekday)</li>
+            <li><strong>Special Flags</strong> — boolean checks on height, hash, and timestamp (up to 14 flags)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="biome how biome derived hash">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How is the Surface Biome determined?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The biome is derived from byte 9 of the block hash (characters 18–20): <code>parseInt(hash[18:20], 16) % 5</code>. This gives an index from 0–4 mapping to Ocean, Desert, Forest, Snowfield, or Volcano.</p>
+          <div class="callout callout-note">
+            <div class="callout-title">Why byte 9?</div>
+            <p>Modern Bitcoin hashes begin with 18+ leading zeros due to proof-of-work difficulty. Using the first byte would produce almost exclusively Ocean biomes. Byte 9 is safely past the typical zero prefix, ensuring fair distribution across all 5 biomes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="civilization ecumenopolis transaction count">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is Ecumenopolis, and how rare is it?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Ecumenopolis (Level 6) is the highest civilization tier, awarded to blocks with more than 8,000 transactions. It represents a planet-spanning city — an entire world turned into one continuous metropolis.</p>
+          <p>Visually it receives a thick bright red pulsing ring, 60 city-light particles, 30 urban glow sprites, a central core glow, +25% opacity boost, and 24 rotating satellite dots orbiting the system.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="economy omega singularity fee tiers">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What are the Economy tiers, and what's Omega?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Economy is derived from <code>total_fee</code> in satoshis. There are 7 tiers:</p>
+          <ul>
+            <li><strong>Tier 0 — Primordial</strong>: 0 sats (Genesis block only)</li>
+            <li><strong>Tier 1 — Agricultural</strong>: 1–10,000 sats</li>
+            <li><strong>Tier 2 — Mercantile</strong>: 10,001–1,000,000 sats</li>
+            <li><strong>Tier 3 — Industrial Empire</strong>: 1,000,001–50,000,000 sats</li>
+            <li><strong>Tier 4 — Post-Scarcity</strong>: 50M–100M sats — cyan orb, 80-particle spiral</li>
+            <li><strong>Tier 5 — Singularity</strong>: 100M–499M sats — crimson/gold dual orb, 120-particle spiral</li>
+            <li><strong>Tier 6 — Ω OMEGA</strong>: 500M+ sats (5+ BTC in fees) — gold supernova orb, 160 particles, 12 energy arcs</li>
+          </ul>
+          <p>Tiers 4–6 layer on top of the stellar class visuals, so an Omega-economy Transcendent block stacks all enhancements from both dimensions simultaneously.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="temporal modifier midnight weekend time">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is a Temporal Modifier?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The temporal modifier reflects when a block was mined (UTC timestamp). There are 4 states:</p>
+          <ul>
+            <li><strong>Void Midnight</strong>: hour 0, 1, or 23 AND it was a weekend</li>
+            <li><strong>Midnight</strong>: hour 0, 1, or 23 on a weekday</li>
+            <li><strong>Weekend Pulse</strong>: Saturday or Sunday, not near midnight</li>
+            <li><strong>Standard</strong>: all other timestamps</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STELLAR CLASSES ── -->
+  <section class="faq-section" id="rarity">
+    <div class="section-label">// 03</div>
+    <h2>Stellar Classes</h2>
+
+    <div class="faq-item" data-tags="stellar class rarity leading zeros how determined">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How is Stellar Class (rarity) determined?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Stellar Class is derived by counting the number of leading zero characters in the block hash. Each additional leading zero is statistically <strong>16× rarer</strong> than the previous class, since each hex character has 1-in-16 odds of being zero.</p>
+          <ul>
+            <li><span class="pill pill-common">Common</span> — 0–8 leading zeros (baseline, most blocks)</li>
+            <li><span class="pill pill-uncommon">Uncommon</span> — exactly 9 zeros</li>
+            <li><span class="pill pill-rare">Rare</span> — exactly 10 zeros</li>
+            <li><span class="pill pill-epic">Epic</span> — exactly 11 zeros</li>
+            <li><span class="pill pill-legendary">Legendary</span> — 12–20 zeros</li>
+            <li><span class="pill pill-mythic">Mythic</span> — 21–22 zeros</li>
+            <li>Transcendent — 23+ zeros (never confirmed in Bitcoin history)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="mythic transcendent how rare never found">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Has anyone ever found a Mythic or Transcendent block?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Bitcoin's current proof-of-work yields hashes with 18–19 leading zeros as the baseline difficulty target. Achieving 21–23+ zeros requires satisfying both the standard difficulty requirement AND an additional cosmic lottery on top of it.</p>
+          <p><strong>Mythic</strong> (21–22 zeros) is statistically extraordinary but theoretically possible during a very lucky mining epoch. <strong>Transcendent</strong> (23+ zeros) has never been confirmed in Bitcoin's entire history of ~950,000 blocks. It is, for practical purposes, a unicorn — defined in protocol but likely never seen.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="current baseline how many zeros today">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How many leading zeros do most blocks have today?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>As of 2025–2026, Bitcoin's proof-of-work difficulty requires hashes to begin with approximately 18–19 leading zeros. This means the vast majority of modern blocks fall in the <span class="pill pill-common">Common</span> class (0–8 by protocol definition, but practically landing in the 18-19 range). "Common" in this context means "the expected output of proof-of-work" — it is by far the most populated class.</p>
+          <div class="callout callout-note">
+            <div class="callout-title">Note on classification</div>
+            <p>The stellar class is determined by leading zeros beyond what proof-of-work mandates. A block with exactly the minimum required zeros is Common. Extra zeros above the difficulty target push a block into higher tiers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESOURCES ── -->
+  <section class="faq-section" id="resources">
+    <div class="section-label">// 04</div>
+    <h2>Resource Deposits</h2>
+
+    <div class="faq-item" data-tags="resource deposit how determined merkle root">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How are resource deposits determined?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The resource deposit is derived from the block's <code>merkle_root</code> — specifically, <code>parseInt(merkle_root[0:2], 16)</code>, giving a byte value from 0–255. This is an independent entropy source from the block hash, ensuring resources are uncorrelated with biome, weather, and stellar class.</p>
+          <ul>
+            <li><strong>Stone</strong>: 0x00–0x91 (~57.0% of blocks)</li>
+            <li><strong>Iron</strong>: 0x92–0xF3 (~38.3%)</li>
+            <li><strong>Gold</strong>: 0xF4–0xFB (~3.1%)</li>
+            <li><strong>Crystal</strong>: 0xFC–0xFE (~1.2%)</li>
+            <li><strong>Void Matter</strong>: 0xFF only (~0.4% — exactly 1-in-256)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="void matter crystal rare visual special">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What do Crystal and Void Matter look like?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p><strong>Crystal (~1.2% of blocks)</strong>: Renders a rotating wireframe octahedron in cyan, a prismatic counter-rotating ring, and 18 independently-twinkling sparkle particles. The trait card in the UI receives an animated border and glowing badge.</p>
+          <p><strong>Void Matter (~0.4% of blocks)</strong>: Renders a solid black event horizon sphere, a dark purple accretion disk spinning at 0.015 rad/frame, 40-particle inward spiral arms, and a dark outer halo. These are the rarest resource visuals in the system — appearing in roughly 1 in 256 blocks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SPECIAL FLAGS ── -->
+  <section class="faq-section" id="flags">
+    <div class="section-label">// 05</div>
+    <h2>Special Flags</h2>
+
+    <div class="faq-item" data-tags="special flags what are they list all">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What are Special Flags?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Special Flags are boolean properties that fire when a block meets specific on-chain criteria — mathematical properties of its height, hash patterns, or timestamp. Up to 14 flags can be active simultaneously on a single block.</p>
+          <ul>
+            <li>🌅 <strong>Genesis Signal</strong> — Pattern <code>20090103</code> in tx hashes (~0.003%)</li>
+            <li>💥 <strong>Nova Event</strong> — Bitcoin halving block (every 210,000 blocks)</li>
+            <li>⚛️ <strong>Quantum Shift</strong> — Difficulty adjustment epoch (every ~2 weeks)</li>
+            <li>📅 <strong>Weekend Pulse</strong> — Mined on Saturday or Sunday (~28%)</li>
+            <li>🌙 <strong>Void Midnight</strong> — Near UTC midnight (~12.5%)</li>
+            <li>✨ <strong>Cosmic Signature</strong> — Hash contains <code>21e8</code> (~0.05%)</li>
+            <li>🔁 <strong>Cosmic Echo</strong> — Hash has 4+ repeated hex chars (~18%)</li>
+            <li>🪞 <strong>Symmetric Nebula</strong> — Block height is a palindrome ≥3 digits</li>
+            <li>🔢 <strong>Prime Alignment</strong> — Block height is prime (~13%)</li>
+            <li>📐 <strong>Harmonic Sequence</strong> — Block height is a Fibonacci number</li>
+            <li>🔥 <strong>Primordial Age</strong> — Block height below 1,000 (0.1%)</li>
+            <li>2️⃣ <strong>Binary Nexus</strong> — Block height is a power of two</li>
+            <li>3️⃣ <strong>Ternary Resonance</strong> — Block height is a power of three</li>
+            <li>! <strong>Exponential Crest</strong> — Block height is a factorial (n!)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="nova event halving what happens">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What happens at a Nova Event (halving block)?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>A Nova Event fires at every Bitcoin halving block — block heights that are exact multiples of 210,000 (blocks 210000, 420000, 630000, 840000, etc.). These are some of the most significant moments in Bitcoin's monetary history, when the block subsidy is cut in half.</p>
+          <p>The flag is displayed prominently in the Special Flags panel. Combined with the Historical Era trait, halving blocks also receive an era label reflecting the specific epoch they inaugurate.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="cosmic signature 21e8 what is">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the Cosmic Signature (21e8) flag?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The Cosmic Signature fires when the block hash contains the hex substring <code>21e8</code>. This pattern references Bitcoin's 21 million coin supply cap and is treated as a sacred pattern in Bitcoin culture — a self-referential signal hidden by proof-of-work randomness. It appears in roughly 0.05% of blocks (~1 in 2,000).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GENESIS SIGNAL ── -->
+  <section class="faq-section" id="genesis">
+    <div class="section-label">// 06</div>
+    <h2>Genesis Signal ✦</h2>
+
+    <div class="faq-item" data-tags="genesis signal what is 20090103 bitcoin birthday">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the Genesis Signal?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The Genesis Signal is the rarest special flag in the entire system. It fires when the pattern <code>20090103</code> appears inside one of the block's transaction hashes. This date — January 3, 2009 — is the day Satoshi Nakamoto mined Bitcoin's Genesis Block (Block 0), embedding the famous Times headline.</p>
+          <p>Only 23 confirmed blocks carry this pattern out of ~950,000 mined, making it rarer than 0.003% — rarer than any stellar class or any other flag in the protocol.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="genesis signal which blocks known list">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Which blocks carry the Genesis Signal?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>As of protocol v0.3.0, the 23 confirmed Genesis Signal blocks are:</p>
+          <p style="font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--gold);line-height:2;letter-spacing:0.3px;">350315 · 351614 · 450967 · 496495 · 507036 · 507904 · 559958 · 595616 · 641609 · 719123 · 732952 · 771861 · 826296 · 826407 · 827406 · 828188 · 851335 · 878452 · 883473 · 897414 · 920323 · 936476 · 941404</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="genesis signal verify how to check manually">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How do I manually verify a Genesis Signal?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>You can verify any Genesis Signal block directly in your browser:</p>
+          <ul>
+            <li>Navigate to <code>ordinals.com/block/{height}</code> — for example, <code>ordinals.com/block/851335</code></li>
+            <li>Open your browser's find bar (Menu → Find, or <strong>Ctrl+F</strong> / <strong>⌘F</strong>)</li>
+            <li>Type <code>20090103</code> and press Enter</li>
+            <li>If the pattern is present in a transaction hash, your browser will highlight and jump to it — shown as "1/1" or higher in the search bar</li>
+          </ul>
+          <p>This works because ordinals.com renders the full list of transaction IDs on block pages, and browser find is a simple text search.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="genesis signal visual 3d what does it look like">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What visual effects does the Genesis Signal add?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>When Genesis Signal is active, seven additional layers are rendered on top of the base star system:</p>
+          <ul>
+            <li><strong>Blazing core orb</strong> — white-gold at 2.5× core radius</li>
+            <li><strong>Gold bloom</strong> — secondary warm glow at 4.5× core radius</li>
+            <li><strong>3× sunrise rings</strong> — concentric tilted tori spinning independently</li>
+            <li><strong>Sacred icosahedron</strong> — gold wireframe with dual-axis rotation</li>
+            <li><strong>16 dawn beams</strong> — radial light lines pulsing outward</li>
+            <li><strong>24 orbit particles</strong> — golden dots in a warm orbital band</li>
+            <li><strong>Outer halo</strong> — diffuse gold at 8× core radius tinting the entire scene</li>
+          </ul>
+          <p>All pre-existing nebula particles also receive a +0.30 opacity boost, and field particles scale ×1.5 and shift to #ffd700.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NAMESPACE ── -->
+  <section class="faq-section" id="namespace">
+    <div class="section-label">// 07</div>
+    <h2>Namespace &amp; Ownership</h2>
+
+    <div class="faq-item" data-tags="namespace what is how does it work ownership">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the Bitcoin Universe namespace?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Each Bitcoin block corresponds to a parent namespace: <code>&lt;height&gt;.bitcoin</code>. For example, block 840000 maps to <code>840000.bitcoin</code>. Child namespaces can be derived as <code>&lt;label&gt;.&lt;height&gt;.bitcoin</code>, following the Ordinals parent-child hierarchy.</p>
+          <p>Inscribing a namespace is optional and purely additive — it is a way to stake an on-chain claim to a world's identifier. Viewing or generating worlds requires no inscription at all.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="first inscription wins ownership dispute">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does ownership work — can someone "own" a block?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Ownership of a namespace inscription (e.g. <code>840000.bitcoin</code>) is determined solely by the Ordinals protocol's first-inscription-wins convention. Whoever inscribes the name first, and whose inscription is confirmed on Bitcoin, holds that namespace.</p>
+          <p>Bitcoin Universe has no central server, no admin key, and no ability to adjudicate ownership disputes or reverse inscriptions. Once confirmed on Bitcoin, the outcome is permanent and immutable.</p>
+          <div class="callout callout-warn">
+            <div class="callout-title">Disclaimer</div>
+            <p>The existence of a rarity trait or namespace does not confer, imply, or guarantee any monetary value. Always conduct your own research before interacting with on-chain assets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECHNICAL ── -->
+  <section class="faq-section" id="technical">
+    <div class="section-label">// 08</div>
+    <h2>Technical</h2>
+
+    <div class="faq-item" data-tags="controls how to use keyboard mouse navigation">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How do I navigate and control the explorer?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <ul>
+            <li><strong>Block input</strong>: Type any block height and press Enter or click Explore</li>
+            <li><strong>Prev / Next buttons</strong>: Navigate one block at a time</li>
+            <li><strong>Keyboard arrows ←→</strong>: Navigate blocks (when not typing in input)</li>
+            <li><strong>R key</strong>: Load a random block from curated ranges</li>
+            <li><strong>Mouse drag</strong>: Orbit the 3D star system</li>
+            <li><strong>Scroll wheel</strong>: Zoom in and out</li>
+            <li><strong>URL persistence</strong>: The current block is stored as <code>?block=height</code> — shareable and bookmarkable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="performance load time fps graphics requirements">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What are the performance characteristics?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <ul>
+            <li><strong>Initial page load</strong>: ~150 KB</li>
+            <li><strong>Block data fetch</strong>: 50–200 ms (ordinals.com API)</li>
+            <li><strong>3D scene build</strong>: under 100–500 ms depending on rarity class</li>
+            <li><strong>Frame rate</strong>: 60 fps on integrated graphics</li>
+            <li><strong>GPU memory</strong>: ~30–45 MB</li>
+          </ul>
+          <p>Block data is cached client-side for up to 30 blocks (LRU eviction), so navigating recently-viewed blocks is instant.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="random number prng seeded determinism math.random">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does the seeded randomness work?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Bitcoin Universe does <strong>not</strong> use <code>Math.random()</code>. It employs a seeded PRNG (Mulberry32) initialized from the block hash. A deterministic seed is derived from the hash string using a polynomial rolling hash, then fed into the Mulberry32 algorithm to produce a reproducible sequence of pseudo-random numbers.</p>
+          <p>This guarantees that the same block hash always generates the identical star system geometry — on any device, at any time, forever.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="3d rendering engine threejs webgl stack">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What 3D technology powers the rendering?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The 3D renderer uses <strong>Three.js r160</strong> with <strong>OrbitControls</strong> and <strong>WebGL 2.0</strong>. The scene is composed of layered systems: background stars, inner nebula (particle count scales with civilization and rarity), a bright core, geodesic cages (Rare+), field particles, aura rings (Legendary+), and a resource deposit ring that appears on all classes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECURITY ── -->
+  <section class="faq-section" id="security">
+    <div class="section-label">// 09</div>
+    <h2>Security &amp; Trust</h2>
+
+    <div class="faq-item" data-tags="trust verify client side no backend server">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How can I trust that the traits are accurate?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Every trait is derived by an open, deterministic formula from publicly verifiable on-chain data. All generation is client-side — you can inspect the source code in your browser's developer tools and verify every computation yourself.</p>
+          <p>The raw block data is fetched directly from <code>ordinals.com/r/blockinfo</code> and displayed in the Trait panel alongside each derivation. There is no intermediary server that could tamper with results. The verification link on each world takes you directly to the source data.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="private key wallet backend server central authority">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Does Bitcoin Universe store any data or require a wallet?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>No. Bitcoin Universe has no backend server, no database, no user accounts, and no connection to any wallet. It is a fully client-side application. No private keys, no personal data, no cookies beyond local theme preferences. Nothing you do in the explorer is transmitted to any server controlled by this project.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="can traits change immutable fixed forever">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Can the traits of a block ever change?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>No. A Bitcoin block's hash, merkle root, transaction count, fees, subsidy, and timestamp are all permanently sealed by proof-of-work the moment the block is mined. These fields can never be altered without invalidating the block and the entire chain that follows it.</p>
+          <p>Therefore, every block's cosmic traits are immutable by definition — anchored forever in the Bitcoin timechain. <strong>Every block is a universe. Its properties are eternal.</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Bitcoin Universe — Frequently Asked Questions<br>
+    <a href="index.html">← Back to Explorer</a> &nbsp;·&nbsp; <a href="paper.html">Whitepaper</a><br>
+    Protocol v0.3.0 · May 2026 · Data source: <a href="https://ordinals.com" target="_blank">ordinals.com/r/blockinfo</a>
+  </footer>
+
+</main>
+</div>
+
+<script>
+// ── STARFIELD ──
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [];
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+function initStars(){
+  stars=[];
+  for(let i=0;i<200;i++) stars.push({
+    x:Math.random()*W, y:Math.random()*H,
+    r:Math.random()*1.2+0.2,
+    a:Math.random(),
+    speed:Math.random()*0.4+0.1,
+    twinkle:Math.random()*2+0.5
+  });
+}
+let t=0;
+function drawStars(){
+  ctx.clearRect(0,0,W,H);
+  t+=0.012;
+  stars.forEach(s=>{
+    const alpha = s.a*(0.4+0.6*Math.sin(t*s.twinkle+s.x));
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize',()=>{ resize(); initStars(); });
+resize(); initStars(); drawStars();
+
+// ── THEME ──
+function setTheme(t){
+  document.documentElement.className = t==='light' ? 'theme-light' : '';
+  document.getElementById('tpDark').classList.toggle('active', t==='dark');
+  document.getElementById('tpLight').classList.toggle('active', t==='light');
+  localStorage.setItem('buni-faq-theme', t);
+}
+(function(){ const s=localStorage.getItem('buni-faq-theme'); setTheme(s||'light'); })();
+
+// ── FAQ ACCORDION ──
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  // close others in same section optionally
+  item.classList.toggle('open', !isOpen);
+}
+
+// ── SEARCH ──
+const searchInput = document.getElementById('faqSearch');
+const noResults = document.getElementById('noResults');
+const faqCount = document.getElementById('faqCount');
+const allItems = document.querySelectorAll('.faq-item');
+const allSections = document.querySelectorAll('.faq-section');
+
+function updateCount(visible){
+  const total = allItems.length;
+  faqCount.textContent = visible === total ? `${total} questions` : `${visible} of ${total} questions`;
+}
+updateCount(allItems.length);
+
+searchInput.addEventListener('input', function(){
+  const q = this.value.trim().toLowerCase();
+  let visible = 0;
+  allItems.forEach(item => {
+    const questionText = item.querySelector('.faq-q-text').textContent.toLowerCase();
+    const answerText = item.querySelector('.faq-answer-inner').textContent.toLowerCase();
+    const tags = (item.dataset.tags || '').toLowerCase();
+    const match = !q || questionText.includes(q) || answerText.includes(q) || tags.includes(q);
+    item.style.display = match ? '' : 'none';
+    if(match) visible++;
+
+    // Highlight matching text in question
+    const qText = item.querySelector('.faq-q-text');
+    if(q && match){
+      const original = qText.textContent;
+      const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+      qText.innerHTML = original.replace(regex, '<mark>$1</mark>');
+    } else {
+      qText.textContent = qText.textContent; // reset — actually reset via data
+      const raw = item.querySelector('.faq-question').getAttribute('data-original-q') || qText.textContent;
+      qText.innerHTML = raw;
+    }
+  });
+
+  // Show/hide sections based on whether any item is visible
+  allSections.forEach(sec => {
+    const hasVisible = [...sec.querySelectorAll('.faq-item')].some(i => i.style.display !== 'none');
+    sec.style.display = hasVisible ? '' : 'none';
+  });
+
+  noResults.style.display = visible === 0 ? 'block' : 'none';
+  updateCount(visible);
+});
+
+// Store original question text for highlight reset
+allItems.forEach(item => {
+  const qText = item.querySelector('.faq-q-text');
+  item.querySelector('.faq-question').setAttribute('data-original-q', qText.innerHTML);
+});
+
+// ── TOC ACTIVE HIGHLIGHT ──
+const tocLinks = document.querySelectorAll('.toc-link');
+const sections = document.querySelectorAll('.faq-section');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      tocLinks.forEach(l=>l.classList.remove('active'));
+      const link = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+},{threshold:0.25});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
