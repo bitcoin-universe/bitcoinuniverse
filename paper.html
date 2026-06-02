@@ -859,7 +859,11 @@ html.theme-light pre { background: rgba(0,0,30,0.04) !important; }
   <a href="#security"    class="toc-link">8. Security</a>
   <a href="#perf"        class="toc-link">9. Performance</a>
   <a href="#conclusion"  class="toc-link">10. Conclusion</a>
-  <a href="#disclaimer"  class="toc-link">11. Disclaimer</a>
+  <a href="#artifact"    class="toc-link">11. Ordinals Artifact ✦</a>
+  <a href="#artifact-model" class="toc-link sub">11.1 Parent-Child Model</a>
+  <a href="#artifact-what"  class="toc-link sub">11.2 What You Can Sell</a>
+  <a href="#artifact-conv"  class="toc-link sub">11.3 Convention</a>
+  <a href="#disclaimer"  class="toc-link">12. Disclaimer</a>
 
   <div class="toc-version">
     Protocol v0.3.0 · May 2026<br>
@@ -931,7 +935,7 @@ html.theme-light pre { background: rgba(0,0,30,0.04) !important; }
         <tr><td><strong>Verifiability</strong></td><td>All traits link to inspectable on-chain fields with explicit derivation formulas.</td></tr>
         <tr><td><strong>Immutability</strong></td><td>Once a block is mined, its cosmic representation is fixed forever.</td></tr>
         <tr><td><strong>Accessibility</strong></td><td>Zero installation; runs in any WebGL-capable browser.</td></tr>
-        <tr><td><strong>Composability</strong></td><td>Namespace system (<code>&lt;label&gt;.&lt;height&gt;.bitcoin</code>) allows child derivations.</td></tr>
+        <tr><td><strong>Composability</strong></td><td>Namespace system (<code>&lt;label&gt;.&lt;height&gt;.bitcoin</code>) allows child derivations. JSON metadata envelope (<code>"p": "bitcoinuniverse"</code>) enables trustless indexing.</td></tr>
       </tbody>
     </table>
   </section>
@@ -1287,18 +1291,22 @@ stellar_class  = lookup(leading_zeros)</code></pre>
   <!-- NAMESPACE -->
   <section class="section" id="namespace">
     <div class="section-label">§ 7</div>
-    <h2>7. Namespace &amp; Composability</h2>
+    <h2>7. Namespace &amp; Ownership</h2>
     <ul style="list-style:none;margin:10px 0;padding:0;display:flex;flex-direction:column;gap:10px;">
       <li style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;">
         <span style="font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;letter-spacing:1px;color:var(--btc);min-width:52px;padding-top:1px;">Parent</span>
-        <code>&lt;height&gt;.bitcoin</code>
+        <div><code>&lt;height&gt;.bitcoin</code> <span style="font-size:0.78rem;color:var(--muted);margin-left:8px;">— the world's deed; first confirmed inscription wins permanently</span></div>
       </li>
       <li style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;">
-        <span style="font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;letter-spacing:1px;color:var(--btc);min-width:52px;padding-top:1px;">Child</span>
-        <code>&lt;label&gt;.&lt;height&gt;.bitcoin</code>
+        <span style="font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;letter-spacing:1px;color:var(--btc);min-width:52px;padding-top:1px;">Child 1</span>
+        <div><code>image.png</code> inscribed under <code>&lt;height&gt;.bitcoin</code> <span style="font-size:0.78rem;color:var(--muted);margin-left:8px;">— the visual artifact, cryptographically linked to ownership</span></div>
+      </li>
+      <li style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;">
+        <span style="font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;letter-spacing:1px;color:var(--btc);min-width:52px;padding-top:1px;">Child 2</span>
+        <div><code>metadata.json</code> sibling child under <code>&lt;height&gt;.bitcoin</code> <span style="font-size:0.78rem;color:var(--muted);margin-left:8px;">— protocol envelope for indexers; carries <code>"p": "bitcoinuniverse"</code>, <code>"op": "artifact"</code>, <code>"block"</code>, <code>"hash"</code>, <code>"traits"</code></span></div>
       </li>
     </ul>
-    <p style="margin-top:10px;color:var(--muted);font-size:0.84rem;">Follows Ordinals parent-child hierarchy.</p>
+    <p style="margin-top:12px;font-size:0.88rem;line-height:1.8">The namespace inscription <strong>is the ownership claim</strong>. Without it, a visual artifact carries no binding on-chain identity. The image inscribed as a child of the namespace is provably linked to the owner — anyone can trace the child's parent and verify provenance without trusting any platform.</p>
   </section>
 
   <!-- SECURITY -->
@@ -1329,16 +1337,101 @@ stellar_class  = lookup(leading_zeros)</code></pre>
     <div class="section-label">§ 10</div>
     <h2>10. Conclusion</h2>
     <div class="abstract-card">
-      <p>Bitcoin Universe transforms block consensus data into trustless, immutable, and procedurally generated digital universes. The deterministic protocol ensures every block height maps to exactly one star system — reproducible by anyone, owned by no one, anchored forever in the blockchain.</p>
-      <p style="margin-top:12px"><strong>Every block is a universe.</strong></p>
+      <p>Bitcoin Universe transforms block consensus data into trustless, immutable, and procedurally generated digital universes. The deterministic protocol ensures every block height maps to exactly one star system — reproducible by anyone, anchored forever in the blockchain.</p>
+      <p style="margin-top:12px"><strong>Every block is a universe. The namespace is the deed. The child inscription is the artifact. What you do with them is up to you.</strong></p>
     </div>
   </section>
 
+  <!-- ORDINALS ARTIFACT -->
+  <section class="section" id="artifact">
+    <div class="section-label">§ 11</div>
+    <h2>11. Ordinals Artifact &amp; Inscription</h2>
+    <p>Bitcoin Universe worlds are fully deterministic and publicly verifiable. Any holder who wishes to make their block's star system a permanent on-chain artifact may do so independently and permissionlessly using standard Ordinals tooling.</p>
+
+    <h3 id="artifact-model">11.1 The Parent-Child Model</h3>
+    <p>The canonical ownership structure uses three linked inscriptions:</p>
+
+    <div class="callout callout-note" style="margin:18px 0">
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--btc-amber);margin-bottom:14px">Inscription Flow</div>
+      <ol style="padding-left:20px;line-height:2.4;font-size:0.88rem">
+        <li><strong>Explore &amp; Verify</strong> — Confirm the block's traits in the explorer: stellar class, flags, biome, resource</li>
+        <li><strong>Capture</strong> — Export a clean 1200×1200 PNG via the Export button (no UI chrome)</li>
+        <li><strong>Inscribe the parent namespace</strong> — Inscribe <code>&lt;height&gt;.bitcoin</code>. This is the <strong>deed to the world</strong>. First confirmed inscription wins, permanently, as determined by Bitcoin consensus</li>
+        <li><strong>Inscribe the image as a child</strong> — Inscribe the PNG as a child of <code>&lt;height&gt;.bitcoin</code>. The image is now cryptographically linked to the ownership claim on-chain — it lives <em>under</em> the deed, provably and permanently</li>
+        <li><strong>Inscribe the metadata as a sibling child</strong> — Inscribe a JSON file as a second child of <code>&lt;height&gt;.bitcoin</code>. This is the protocol envelope that lets indexers and marketplaces discover and verify the artifact without trusting any server:
+          <pre style="margin:12px 0 4px;padding:14px 18px;background:rgba(0,0,0,0.55);border:1px solid rgba(0,229,255,0.15);border-radius:8px;font-family:'Space Mono',monospace;font-size:0.7rem;line-height:1.9;color:#00e5ff;overflow-x:auto;">{
+  "p": "bitcoinuniverse",
+  "op": "artifact",
+  "block": &lt;height&gt;,
+  "hash": "&lt;block_hash&gt;",
+  "type": "image",
+  "traits": { ... }
+}</pre>
+        </li>
+      </ol>
+    </div>
+
+    <div class="callout" style="background:rgba(247,147,26,0.06);border:1px solid rgba(247,147,26,0.3);border-left:3px solid var(--btc);margin-bottom:20px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--btc-amber);margin-bottom:10px">Why Child Inscription — Not Standalone?</div>
+      <p style="font-size:0.88rem;line-height:1.8">A standalone image inscription has no binding to any block. Two people could each inscribe a screenshot of the same block and neither is provably the owner. When the image is inscribed as a child of <code>&lt;height&gt;.bitcoin</code>, it is permanently and cryptographically linked to the namespace. Anyone can trace the child's parent and verify provenance without trusting any platform. <strong>The parent-child link is what makes the artifact canonical.</strong></p>
+    </div>
+
+    <h3 id="artifact-what">11.2 Two Distinct Sellable Assets</h3>
+    <p>The parent-child model creates two independent on-chain assets with different ownership semantics:</p>
+
+    <table style="width:100%;border-collapse:collapse;margin:16px 0">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--btc-amber);border-bottom:1px solid rgba(247,147,26,0.3)">Asset</th>
+          <th style="text-align:left;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--btc-amber);border-bottom:1px solid rgba(247,147,26,0.3)">What It Represents</th>
+          <th style="text-align:left;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--btc-amber);border-bottom:1px solid rgba(247,147,26,0.3)">If Sold/Transferred</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Parent</strong><br><code style="font-size:0.72rem">840000.bitcoin</code></td>
+          <td style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">The world's deed and namespace root. The most authoritative asset — holds the block's identity and the right to issue further children</td>
+          <td style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">Buyer inherits the world's identity and namespace authority. Seller relinquishes all claims</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 14px;font-size:0.85rem"><strong>Child</strong><br><code style="font-size:0.72rem">image.png ↳ 840000.bitcoin</code></td>
+          <td style="padding:12px 14px;font-size:0.85rem">The visual artifact — the canonical render of the world, provably linked to its parent namespace</td>
+          <td style="padding:12px 14px;font-size:0.85rem">Buyer holds the canonical image artifact. Parent namespace remains with original owner unless separately transferred</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:0.88rem;line-height:1.8;color:var(--muted)">An owner could keep the parent (holding the world's identity forever) while selling the child artifact to a collector. Or sell the parent and transfer everything. This creates two tiers of ownership with genuinely different value propositions — decided entirely by the owner, with no platform involvement.</p>
+
+    <h3 id="artifact-conv">11.3 Convention</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--btc-amber);border-bottom:1px solid rgba(247,147,26,0.3)">Convention</th>
+          <th style="text-align:left;padding:10px 14px;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--btc-amber);border-bottom:1px solid rgba(247,147,26,0.3)">Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Image format</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">PNG, 1200×1200 px minimum, square, no UI chrome</td></tr>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Image inscription</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">Must be a <strong>child of</strong> <code>&lt;height&gt;.bitcoin</code> — not standalone</td></tr>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Metadata inscription</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">JSON sibling child of <code>&lt;height&gt;.bitcoin</code> — protocol envelope for indexers</td></tr>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Required JSON fields</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><code>"p": "bitcoinuniverse"</code>, <code>"op": "artifact"</code>, <code>"block"</code>, <code>"hash"</code>, <code>"type": "image"</code></td></tr>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Optional JSON fields</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><code>"traits": { ... }</code> — recommended; anchors visual properties for marketplaces and verifiers</td></tr>
+        <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem"><strong>Priority rule</strong></td><td style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem">First confirmed namespace inscription wins — enforced by Bitcoin consensus</td></tr>
+        <tr><td style="padding:10px 14px;font-size:0.85rem"><strong>No platform</strong></td><td style="padding:10px 14px;font-size:0.85rem">Any standard Ordinals tool: <code>ord</code> CLI, OrdinalsBot, Gamma.io</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout" style="background:rgba(255,23,68,0.04);border:1px solid rgba(255,23,68,0.2);border-left:3px solid #ff1744">
+      <div style="font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ff6b6b;margin-bottom:8px">No Platform Custody</div>
+      <p style="font-size:0.88rem;line-height:1.8">Bitcoin Universe operates no marketplace, holds no custody of any inscription, and has no admin key over any namespace or artifact. Once inscribed on Bitcoin, the outcome is permanent and outside the control of any party — including this project.</p>
+    </div>
+  </section>
 
   <!-- DISCLAIMER -->
   <section class="section" id="disclaimer">
-    <div class="section-label">§ 11</div>
-    <h2>11. Disclaimer</h2>
+    <div class="section-label">§ 12</div>
+    <h2>12. Disclaimer</h2>
     <div class="disclaimer-card">
       <p>Bitcoin Universe is an experimental, open, and community-driven project. Please read the following carefully before interacting with any aspect of this protocol.</p>
       <ul class="disclaimer-list">
