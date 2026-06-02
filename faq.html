@@ -368,6 +368,7 @@ html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgb
   <a href="#flags" class="toc-link">Special Flags</a>
   <a href="#genesis" class="toc-link">Genesis Signal</a>
   <a href="#namespace" class="toc-link">Namespace</a>
+  <a href="#artifact" class="toc-link">Ordinals Artifact ✦</a>
   <a href="#technical" class="toc-link">Technical</a>
   <a href="#security" class="toc-link">Security & Trust</a>
 
@@ -804,8 +805,8 @@ html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgb
       </div>
       <div class="faq-answer">
         <div class="faq-answer-inner">
-          <p>Each Bitcoin block corresponds to a parent namespace: <code>&lt;height&gt;.bitcoin</code>. For example, block 840000 maps to <code>840000.bitcoin</code>. Child namespaces can be derived as <code>&lt;label&gt;.&lt;height&gt;.bitcoin</code>, following the Ordinals parent-child hierarchy.</p>
-          <p>Inscribing a namespace is optional and purely additive — it is a way to stake an on-chain claim to a world's identifier. Viewing or generating worlds requires no inscription at all.</p>
+          <p>Each Bitcoin block corresponds to a parent namespace: <code>&lt;height&gt;.bitcoin</code>. For example, block 840000 maps to <code>840000.bitcoin</code>. Child inscriptions can be nested under it following the Ordinals parent-child hierarchy.</p>
+          <p>The namespace inscription <strong>is the ownership claim</strong> — it is the on-chain proof that you have staked this block's identity. Without it, you have no binding connection to the world. Viewing and exploring requires no inscription, but <strong>owning a world requires holding its namespace.</strong></p>
         </div>
       </div>
     </div>
@@ -817,8 +818,8 @@ html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgb
       </div>
       <div class="faq-answer">
         <div class="faq-answer-inner">
-          <p>Ownership of a namespace inscription (e.g. <code>840000.bitcoin</code>) is determined solely by the Ordinals protocol's first-inscription-wins convention. Whoever inscribes the name first, and whose inscription is confirmed on Bitcoin, holds that namespace.</p>
-          <p>Bitcoin Universe has no central server, no admin key, and no ability to adjudicate ownership disputes or reverse inscriptions. Once confirmed on Bitcoin, the outcome is permanent and immutable.</p>
+          <p>Ownership of a namespace inscription (e.g. <code>840000.bitcoin</code>) is determined solely by the Ordinals protocol's first-inscription-wins convention. Whoever inscribes the name first, and whose inscription is confirmed on Bitcoin, holds that namespace permanently.</p>
+          <p>Bitcoin Universe has no central server, no admin key, and no ability to adjudicate ownership disputes or reverse inscriptions. Once confirmed on Bitcoin, the outcome is immutable.</p>
           <div class="callout callout-warn">
             <div class="callout-title">Disclaimer</div>
             <p>The existence of a rarity trait or namespace does not confer, imply, or guarantee any monetary value. Always conduct your own research before interacting with on-chain assets.</p>
@@ -828,9 +829,137 @@ html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgb
     </div>
   </section>
 
+  <!-- ── ORDINALS ARTIFACT ── -->
+  <section class="faq-section" id="artifact">
+    <div class="section-label">// 08</div>
+    <h2>Ordinals Artifact &amp; Inscription ✦</h2>
+
+    <div class="faq-item" data-tags="nft ordinals artifact inscription what is child parent">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How do I turn my block's world into an on-chain artifact?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>The canonical model uses <strong>two linked inscriptions</strong> — a parent namespace and a child image — forming an atomic, cryptographically-linked artifact on Bitcoin:</p>
+          <ol style="padding-left:20px;margin:10px 0">
+            <li style="margin-bottom:10px"><strong>Explore &amp; Verify</strong> — Navigate to your block height and confirm its traits: stellar class, special flags, biome, resource</li>
+            <li style="margin-bottom:10px"><strong>Capture</strong> — Use the Export button for a clean 1200×1200 PNG with no UI chrome</li>
+            <li style="margin-bottom:10px"><strong>Inscribe the parent namespace</strong> — Inscribe <code>&lt;height&gt;.bitcoin</code> (e.g. <code>840000.bitcoin</code>). <strong>This is the deed to your world.</strong> First confirmed inscription wins, permanently</li>
+            <li style="margin-bottom:10px"><strong>Inscribe the image as a child</strong> — Inscribe the PNG as a child inscription of <code>840000.bitcoin</code>. The image is now cryptographically linked to the namespace — it lives <em>under</em> your ownership claim on-chain</li>
+            <li style="margin-bottom:0"><strong>Inscribe the metadata as a sibling child</strong> — Inscribe a JSON file as a second child of <code>840000.bitcoin</code> alongside the image. This is the protocol signal that lets indexers and marketplaces identify your artifact without trusting any server</li>
+          </ol>
+          <div class="callout callout-note" style="margin-top:14px">
+            <div class="callout-title">No permission needed</div>
+            <p>No mint button, no platform wallet, no smart contract. Use any standard Ordinals inscription tool: <code>ord</code> CLI, OrdinalsBot, Gamma.io, etc.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="child inscription why image under namespace parent link">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Why inscribe the image as a child of the namespace — not separately?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>When the image is a child of <code>840000.bitcoin</code>, it is permanently and provably linked to the ownership claim on-chain. Anyone can trace the child inscription back to its parent and verify who holds the namespace. A standalone image inscription has no such binding — two people could each inscribe the same screenshot and neither is provably the owner.</p>
+          <p>The parent-child link is what makes the artifact canonical. It's the difference between a picture and a deed-backed asset.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="what can sell parent child both trade transfer ownership">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What exactly can I sell — the parent, the child, or both?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>There are two distinct on-chain assets, and the owner decides independently what to do with each:</p>
+          <ul>
+            <li style="margin-bottom:10px">
+              <strong>The parent</strong> — <code>840000.bitcoin</code> — is the world's deed and namespace root. Selling/transferring this passes the identity of the world and the right to issue further child inscriptions under it. It's the most authoritative asset.
+            </li>
+            <li>
+              <strong>The child</strong> — the PNG image inscribed under the parent — is the visual artifact. It can be sold independently. The buyer gets the canonical image linked to that block's namespace, without necessarily owning the parent namespace itself.
+            </li>
+          </ul>
+          <div class="callout callout-note" style="margin-top:12px">
+            <div class="callout-title">Interesting mechanic</div>
+            <p>An owner could keep the parent (holding the world's identity forever) while selling the child artifact to a collector. Or sell the parent and transfer everything. This creates two tiers of ownership with genuinely different value propositions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="verify authenticity fake screenshot proof provenance canonical">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How can anyone verify an artifact is the canonical one?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>Three checks, all doable by anyone:</p>
+          <ul>
+            <li style="margin-bottom:8px"><strong>Visual</strong> — Load the same block height in the explorer. The deterministic renderer produces the exact same star system on any device, forever. If the inscribed image matches, it's authentic.</li>
+            <li style="margin-bottom:8px"><strong>On-chain lineage</strong> — Trace the child inscription's parent. If it leads to <code>&lt;height&gt;.bitcoin</code> held by a valid first-inscription, the provenance is clean. A fake child not under the canonical parent is immediately identifiable.</li>
+            <li><strong>Protocol signal</strong> — Inspect the sibling JSON child. A canonical artifact carries <code>"p": "bitcoinuniverse"</code> and <code>"op": "artifact"</code>. Indexers and marketplaces filter on these fields to surface only verified artifacts — no backend required.</li>
+          </ul>
+          <p>No trust in the inscriber, no trust in a marketplace, no trust in Bitcoin Universe required. Bitcoin's consensus is the source of truth.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="image format resolution export png quality metadata json">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What format and metadata is recommended for the child inscription?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <ul>
+            <li><strong>Format</strong>: PNG, 1200×1200 px minimum, square, no UI chrome</li>
+            <li><strong>Parent</strong>: must be inscribed as a child of <code>&lt;height&gt;.bitcoin</code></li>
+            <li><strong>Metadata (recommended)</strong>: attach a sibling JSON child inscription — a self-describing protocol envelope that lets indexers and marketplaces identify and verify the artifact without trusting any platform:
+              <pre style="margin:10px 0 4px;padding:12px 16px;background:rgba(0,0,0,0.5);border:1px solid rgba(0,229,255,0.15);border-radius:8px;font-family:'Space Mono',monospace;font-size:0.68rem;line-height:1.9;color:var(--cyan);overflow-x:auto;">{
+  "p": "bitcoinuniverse",
+  "op": "artifact",
+  "block": &lt;height&gt;,
+  "hash": "&lt;block_hash&gt;",
+  "type": "image",
+  "traits": { ... }
+}</pre>
+              <span style="font-size:0.8rem;color:var(--muted)">The <code>p</code> field is the protocol identifier — indexers filter on this. <code>op</code> declares intent. <code>block</code> links the inscription to its Bitcoin block. Together they make discovery and verification trustless.</span>
+            </li>
+          </ul>
+          <div class="callout callout-warn" style="margin-top:12px">
+            <div class="callout-title">File size &amp; fees</div>
+            <p>PNG files range ~400KB–1.2MB depending on rarity class. Higher-rarity blocks have more particles and visual effects. Inscription fees scale with file size — factor this in, especially for large Legendary or Genesis Signal renders.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item" data-tags="platform marketplace custody admin key control no">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Does Bitcoin Universe control any of this?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          <p>No. Bitcoin Universe operates no marketplace, holds no custody of any inscription, and has no admin key over any namespace or artifact. The project is a client-side explorer and an open community convention — nothing more.</p>
+          <p>Once confirmed on Bitcoin, inscriptions are permanent and outside the control of any party, including this project. Trade and transfer through standard Bitcoin and Ordinals tooling.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
   <!-- ── TECHNICAL ── -->
   <section class="faq-section" id="technical">
-    <div class="section-label">// 08</div>
+    <div class="section-label">// 09</div>
     <h2>Technical</h2>
 
     <div class="faq-item" data-tags="controls how to use keyboard mouse navigation">
@@ -900,7 +1029,7 @@ html.theme-light code{background:rgba(0,0,0,0.06);color:#1a6fa0;border-color:rgb
 
   <!-- ── SECURITY ── -->
   <section class="faq-section" id="security">
-    <div class="section-label">// 09</div>
+    <div class="section-label">// 10</div>
     <h2>Security &amp; Trust</h2>
 
     <div class="faq-item" data-tags="trust verify client side no backend server">
